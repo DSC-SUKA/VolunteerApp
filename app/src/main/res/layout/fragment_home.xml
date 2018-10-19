@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools"
+android:id="@+id/content_main"
+android:background="@mipmap/bg_volunteer_home"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+android:paddingTop="8dp"
+android:paddingBottom="8dp"
+app:layout_behavior="@string/appbar_scrolling_view_behavior"
+tools:context=".fragment.HomeFragment"
+android:orientation="vertical">
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="125dp"
+    android:orientation="vertical"
+    android:weightSum="5">
+    <TextView
+        android:layout_width="210dp"
+        android:layout_height="0dp"
+        android:layout_gravity="center"
+        android:textStyle="italic"
+        android:textSize="16sp"
+        android:layout_weight="4"
+        android:text="@string/tv_quotes"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:text="@string/tv_latest_contributions"
+        android:gravity="center"
+        android:textSize="11sp"
+        android:layout_weight="1"
+        android:background="@android:color/white"/>
+</LinearLayout>
+<android.support.v7.widget.RecyclerView
+    android:id="@+id/rv_contributions"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:listitem="@layout/list_item"/>
+
+</LinearLayout>
