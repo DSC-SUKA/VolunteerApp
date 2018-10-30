@@ -16,14 +16,14 @@
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:layout_marginLeft="@dimen/activity_horizontal_margin"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
         android:src="@mipmap/ic_launcher_round"
-        android:id="@+id/img_person"
+        android:id="@+id/img_requester_photo"
         android:layout_centerVertical="true"/>
 
     <LinearLayout
-        android:layout_toRightOf="@id/img_person"
+        android:layout_toRightOf="@id/img_requester_photo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -36,17 +36,20 @@
             android:layout_height="wrap_content"
             tools:text="Darmawan Wibisono"
             android:textColor="@android:color/black"
-            android:textSize="20sp"/>
+            android:textSize="20sp"
+            android:id="@+id/tv_requester_name"/>
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             tools:text="Pendidikan Kimia"
-            android:textColor="@android:color/black"/>
+            android:textColor="@android:color/black"
+            android:id="@+id/tv_requester_prodi"/>
         <TextView
             android:layout_marginTop="16dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:text="08:39 AM"/>
+            tools:text="08:39 AM"
+            android:id="@+id/tv_request_time"/>
     </LinearLayout>
 
     <android.support.design.widget.FloatingActionButton
