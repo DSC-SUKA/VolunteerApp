@@ -16,8 +16,8 @@
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:layout_marginLeft="@dimen/activity_horizontal_margin"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
         android:src="@mipmap/ic_launcher_round"
         android:id="@+id/img_person_contribution"
         android:layout_centerVertical="true"/>
@@ -32,6 +32,7 @@
         android:layout_marginLeft="8dp"
         >
         <TextView
+            android:id="@+id/tv_contribution_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             tools:text="Darmawan Wibisono"
@@ -41,12 +42,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             tools:text="Pendidikan Kimia"
-            android:textColor="@android:color/black"/>
+            android:textColor="@android:color/black"
+            android:id="@+id/tv_contribution_prodi"/>
         <TextView
             android:layout_marginTop="16dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:text="08:39 AM"/>
+            tools:text="08:39 AM"
+            android:id="@+id/tv_contribution_time"/>
     </LinearLayout>
 
 </RelativeLayout>

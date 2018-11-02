@@ -21,4 +21,8 @@
     <string name="submit">Submit</string>
     <string name="discard">Discard</string>
     <string name="send">Send</string>
+
+
+    <string name="type_blind">Tuna Netra</string>
+    <string name="type_deaf">Tuna Rungu</string>
 </resources>

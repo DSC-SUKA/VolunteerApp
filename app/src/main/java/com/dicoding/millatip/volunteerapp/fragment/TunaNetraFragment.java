@@ -3,6 +3,7 @@ package com.dicoding.millatip.volunteerapp.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -27,7 +28,7 @@ import retrofit2.Response;
  * A simple {@link Fragment} subclass.
  */
 public class TunaNetraFragment extends Fragment {
-    ApiInterface mApiInterface;
+    private ApiInterface mApiInterface;
     private RecyclerView mRecyclerView;
     private RequestAdapter mAdapter;
 

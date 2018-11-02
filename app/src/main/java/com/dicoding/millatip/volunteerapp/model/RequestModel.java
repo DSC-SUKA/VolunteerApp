@@ -6,7 +6,7 @@ import java.util.List;
 
 public class RequestModel {
     @SerializedName("requests")
-    public List<RequestItems> requestItems;
+    private List<RequestItems> requestItems;
 
     public RequestModel(List<RequestItems> requestItems){
         this.requestItems = requestItems;
