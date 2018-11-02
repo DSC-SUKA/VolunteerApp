@@ -1,9 +1,9 @@
 package com.dicoding.millatip.volunteerapp.fragment;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -11,8 +11,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.dicoding.millatip.volunteerapp.ItemClickSupport;
 import com.dicoding.millatip.volunteerapp.R;
 import com.dicoding.millatip.volunteerapp.adapter.RequestAdapter;
+import com.dicoding.millatip.volunteerapp.TunaNetraRecordActivity;
 import com.dicoding.millatip.volunteerapp.model.RequestItems;
 import com.dicoding.millatip.volunteerapp.model.RequestModel;
 import com.dicoding.millatip.volunteerapp.rest.ApiClient;
@@ -46,6 +48,14 @@ public class TunaNetraFragment extends Fragment {
 
         mRecyclerView = v.findViewById(R.id.rv_request_tuna_netra);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        ItemClickSupport.addTo(mRecyclerView).setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
+            @Override
+            public void onItemClicked(RecyclerView recyclerView, int position, View v) {
+                Intent intent = new Intent(getContext(), TunaNetraRecordActivity.class);
+                startActivity(intent);
+            }
+        });
 
         mApiInterface = ApiClient.getClient().create(ApiInterface.class);
         refresh();

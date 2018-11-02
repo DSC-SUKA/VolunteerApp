@@ -24,7 +24,9 @@
         <activity android:name=".login.LoginActivity" />
         <activity android:name=".login.SignUpActivity" />
         <activity android:name=".login.ResetPasswordActivity" />
-        <activity android:name=".LatestContributionExtendedActivity"></activity>
+        <activity android:name=".LatestContributionExtendedActivity" />
+        <activity android:name=".TunaNetraRecordActivity" />
+        <activity android:name=".TunaNetraSendActivity"></activity>
     </application>
 
 </manifest>
