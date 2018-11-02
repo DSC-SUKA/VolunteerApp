@@ -1,6 +1,11 @@
 package com.dicoding.millatip.volunteerapp;
 
 import android.content.Intent;
+import android.media.MediaPlayer;
+import android.media.MediaRecorder;
+import android.os.Environment;
+import android.os.Handler;
+import android.os.SystemClock;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,18 +17,27 @@ import android.widget.TextView;
 
 import com.dicoding.millatip.volunteerapp.fragment.TunaNetraAlertDiscardDialog;
 
+import java.io.IOException;
+
 public class TunaNetraRecordActivity extends AppCompatActivity implements View.OnClickListener{
     private static final String EXTRA_REQUEST_ID = "request_id_extras";
     private Button btnSend, btnDiscard;
     private ImageButton btnRecord;
     private boolean isRecording, isRecorded, isRecordPaused;
     private TextView tvRecordMessage;
+    private long startHTime = 0L;
+    private Handler handler = new Handler();
+    long timeInMilis = 0L, timeSwapBuff = 0L, updatedTime = 0L;
+    private MediaRecorder myAudioRecorder;
+    private String outputFile;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tuna_netra_record);
+
+        setRecorder();
 
         isRecorded = false;
         isRecordPaused = true;
@@ -45,6 +59,17 @@ public class TunaNetraRecordActivity extends AppCompatActivity implements View.O
             @Override
             public boolean onLongClick(View v) {
                 if (isRecorded == false){
+                    try {
+                        myAudioRecorder.prepare();
+                        myAudioRecorder.start();
+                        startHTime = SystemClock.uptimeMillis();
+                        handler.postDelayed(updateTimer, 0);
+                    } catch (IllegalStateException ise){
+                        //
+                    } catch (IOException ioe){
+                        //
+                    }
+
                     btnRecord.setImageDrawable(getResources().getDrawable(R.mipmap.btn_stop));
                     tvRecordMessage.setText("00:01");
                     isRecording = true;
@@ -60,8 +85,14 @@ public class TunaNetraRecordActivity extends AppCompatActivity implements View.O
                 if (isRecording){
                     switch (event.getAction()){
                         case MotionEvent.ACTION_UP:
+                            myAudioRecorder.stop();
+                            myAudioRecorder.release();
+                            myAudioRecorder = null;
+
+                            timeSwapBuff += timeInMilis;
+                            handler.removeCallbacks(updateTimer);
+
                             setPlayButton();
-                            tvRecordMessage.setText("00:30");
                             isRecorded = true;
                             btnSend.setEnabled(true);
                             btnDiscard.setEnabled(true);
@@ -69,12 +100,22 @@ public class TunaNetraRecordActivity extends AppCompatActivity implements View.O
                             return true;
                     }
                 } else if (isRecorded){
+                    MediaPlayer mediaPlayer = new MediaPlayer();
+                    mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                        @Override
+                        public void onCompletion(MediaPlayer mp) {
+                            setPlayButton();
+                            isRecordPaused = true;
+                        }
+                    });
                     switch (event.getAction()){
                         case MotionEvent.ACTION_DOWN:
                             if (isRecordPaused){
+                                playAudioRecorded(mediaPlayer, outputFile);
                                 setStopButton();
                                 isRecordPaused = !isRecordPaused;
                             } else {
+                                stopAudioRecorded(mediaPlayer, outputFile);
                                 setPlayButton();
                                 isRecordPaused = !isRecordPaused;
                             }
@@ -88,7 +129,41 @@ public class TunaNetraRecordActivity extends AppCompatActivity implements View.O
         });
 
 
+
+
     }
+
+    private void setRecorder() {
+        outputFile = Environment.getExternalStorageDirectory().getAbsolutePath() + "/recording.3gp";
+        myAudioRecorder = new MediaRecorder();
+        myAudioRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+        myAudioRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
+        myAudioRecorder.setAudioEncoder(MediaRecorder.OutputFormat.AMR_NB);
+        myAudioRecorder.setOutputFile(outputFile);
+    }
+
+    private void stopAudioRecorded(MediaPlayer mediaPlayer, String outputFile) {
+        if (mediaPlayer != null){
+            try {
+                mediaPlayer.stop();
+                mediaPlayer.reset();
+                mediaPlayer.release();
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void playAudioRecorded(MediaPlayer mediaPlayer, String outputFile) {
+        try {
+            mediaPlayer.setDataSource(outputFile);
+            mediaPlayer.prepare();
+            mediaPlayer.start();
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
 
     private void setRecordButton(){
         btnRecord.setImageDrawable(getResources().getDrawable(R.mipmap.btn_record));
@@ -126,13 +201,43 @@ public class TunaNetraRecordActivity extends AppCompatActivity implements View.O
         }
     }
 
+    private Runnable updateTimer = new Runnable() {
+        @Override
+        public void run() {
+            timeInMilis = SystemClock.uptimeMillis() - startHTime;
+            updatedTime = timeSwapBuff + timeInMilis;
+
+            int secs = (int) (updatedTime / 1000);
+            int mins = secs / 60;
+            secs = secs % 60;
+            if (tvRecordMessage != null){
+                tvRecordMessage.setText("" + String.format("%02d", mins) + ":" + String.format("%02d", secs));
+                handler.postDelayed(this, 0);
+            }
+        }
+    };
+
     private void resetRecord() {
         isRecorded = false;
         isRecordPaused = true;
         isRecording = false;
+
         setRecordButton();
+
         btnSend.setEnabled(false);
         btnDiscard.setEnabled(false);
+
+        resetRecordMessage();
+
+        tvRecordMessage.setText(getString(R.string.tv_record_message));
+        setRecorder();
+    }
+
+    private void resetRecordMessage(){
+        startHTime = 0L;
+        timeInMilis = 0L;
+        timeSwapBuff = 0L;
+        updatedTime = 0L;
     }
 
 }

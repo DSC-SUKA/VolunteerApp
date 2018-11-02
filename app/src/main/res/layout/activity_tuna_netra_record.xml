@@ -25,7 +25,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:gravity="center"
-            android:text="Press the button to start recording" />
+            android:text="@string/tv_record_message" />
     </LinearLayout>
 
     <LinearLayout
