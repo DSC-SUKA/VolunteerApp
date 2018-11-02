@@ -61,7 +61,7 @@ public class TunaNetraSendActivity extends AppCompatActivity implements View.OnC
     public void onClick(View v) {
 
         if (v.getId() == R.id.btn_submit){
-            Toast.makeText(this, "Title : " + contentTitle + " on Category : " + spinnerSelected + " Submitted to request_id : " + getIntent().getIntExtra(EXTRA_REQUEST_ID_SUBMIT, 0) , Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, contentTitle + " Submitted" , Toast.LENGTH_SHORT).show();
         }
     }
 
