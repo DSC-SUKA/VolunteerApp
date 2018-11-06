@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "764947174533",
+    "firebase_url": "https://sukacare-221210.firebaseio.com",
+    "project_id": "sukacare-221210",
+    "storage_bucket": "sukacare-221210.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:764947174533:android:e0ab0eb0820783e0",
+        "android_client_info": {
+          "package_name": "com.dicoding.millatip.volunteerapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "764947174533-c2lb1migord20a3g6rfn8ls68ukvf9c2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAV_Av02jIz27j4XTMSasfkFInHy7RpgmY"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
