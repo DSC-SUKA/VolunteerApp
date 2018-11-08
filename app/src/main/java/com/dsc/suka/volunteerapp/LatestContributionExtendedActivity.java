@@ -110,7 +110,6 @@ public class LatestContributionExtendedActivity extends AppCompatActivity implem
                     btnPlay.setImageDrawable(getResources().getDrawable(R.drawable.ic_play_arrow_red_24dp));
                     isPaused = !isPaused;
                 }
-
                 primarySeekBarProggressUpdater();
                 break;
         }
@@ -139,4 +138,5 @@ public class LatestContributionExtendedActivity extends AppCompatActivity implem
         }
         return false;
     }
+
 }

@@ -55,52 +55,40 @@ public class TunaNetraRecordActivity extends AppCompatActivity implements View.O
 
         btnRecord = findViewById(R.id.btn_record);
 
-        btnRecord.setOnLongClickListener(new View.OnLongClickListener() {
+        btnRecord.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onLongClick(View v) {
+            public void onClick(View v) {
                 if (isRecorded == false){
-                    try {
-                        myAudioRecorder.prepare();
-                        myAudioRecorder.start();
-                        startHTime = SystemClock.uptimeMillis();
-                        handler.postDelayed(updateTimer, 0);
-                    } catch (IllegalStateException ise){
-                        //
-                    } catch (IOException ioe){
-                        //
-                    }
+                    if (isRecording == false){
+                        try {
+                            myAudioRecorder.prepare();
+                            myAudioRecorder.start();
+                            startHTime = SystemClock.uptimeMillis();
+                            handler.postDelayed(updateTimer, 0);
+                        } catch (IllegalStateException ise){
+                            ise.printStackTrace();
+                        } catch (IOException e){
+                            e.printStackTrace();
+                        }
 
-                    btnRecord.setImageDrawable(getResources().getDrawable(R.mipmap.btn_stop));
-                    tvRecordMessage.setText("00:01");
-                    isRecording = true;
-                    return true;
-                }
-                return false;
-            }
-        });
+                        setStopButton();
+                        isRecording = true;
+                    } else {
+                        myAudioRecorder.stop();
+                        myAudioRecorder.release();
+                        myAudioRecorder = null;
 
-        btnRecord.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (isRecording){
-                    switch (event.getAction()){
-                        case MotionEvent.ACTION_UP:
-                            myAudioRecorder.stop();
-                            myAudioRecorder.release();
-                            myAudioRecorder = null;
+                        timeSwapBuff += timeInMilis;
+                        handler.removeCallbacks(updateTimer);
 
-                            timeSwapBuff += timeInMilis;
-                            handler.removeCallbacks(updateTimer);
-
-                            setPlayButton();
-                            isRecorded = true;
-                            btnSend.setEnabled(true);
-                            btnDiscard.setEnabled(true);
-                            isRecording = !isRecording;
-                            return true;
+                        setPlayButton();
+                        isRecording = !isRecording;
+                        isRecorded = true;
+                        btnSend.setEnabled(true);
+                        btnDiscard.setEnabled(true);
                     }
                 } else if (isRecorded){
-                    MediaPlayer mediaPlayer = new MediaPlayer();
+                    final MediaPlayer mediaPlayer = new MediaPlayer();
                     mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                         @Override
                         public void onCompletion(MediaPlayer mp) {
@@ -108,28 +96,18 @@ public class TunaNetraRecordActivity extends AppCompatActivity implements View.O
                             isRecordPaused = true;
                         }
                     });
-                    switch (event.getAction()){
-                        case MotionEvent.ACTION_DOWN:
-                            if (isRecordPaused){
-                                playAudioRecorded(mediaPlayer, outputFile);
-                                setStopButton();
-                                isRecordPaused = !isRecordPaused;
-                            } else {
-                                stopAudioRecorded(mediaPlayer, outputFile);
-                                setPlayButton();
-                                isRecordPaused = !isRecordPaused;
-                            }
-                            return true;
+                    if (isRecordPaused){
+                        playAudioRecorded(mediaPlayer, outputFile);
+                        setStopButton();
+                        isRecordPaused = !isRecordPaused;
+                    } else {
+                        stopAudioRecorded(mediaPlayer, outputFile);
+                        setPlayButton();
+                        isRecordPaused = !isRecordPaused;
                     }
                 }
-                return false;
             }
-
-
         });
-
-
-
 
     }
 
