@@ -17,6 +17,7 @@
             android:layout_marginBottom="@dimen/activity_vertical_margin"/>
 
         <EditText
+            android:id="@+id/edt_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/editext_background"
@@ -31,12 +32,12 @@
             android:textSize="16sp"
             android:layout_marginBottom="@dimen/activity_vertical_margin"/>
 
-        <EditText
+        <Spinner
+            android:id="@+id/spinner_category"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/editext_background"
-            android:hint="@string/category"
-            />
+            android:spinnerMode="dropdown"/>
     </LinearLayout>
 
     <Button

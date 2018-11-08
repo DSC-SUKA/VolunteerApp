@@ -8,7 +8,7 @@
     android:elevation="@dimen/activity_horizontal_margin"
     android:orientation="vertical"
     android:padding="16dp"
-    tools:context=".fragment.tuna_netra_alert_discard">
+    tools:context=".fragment.TunaNetraAlertDiscardDialog">
 
     <ImageView
         android:layout_width="match_parent"
@@ -41,6 +41,7 @@
         android:weightSum="2">
 
         <Button
+            android:id="@+id/btn_discard_yes"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
@@ -53,6 +54,7 @@
             android:textColor="@color/buttonPositive" />
 
         <Button
+            android:id="@+id/btn_discard_no"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"

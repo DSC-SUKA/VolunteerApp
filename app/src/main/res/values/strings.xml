@@ -21,6 +21,10 @@
     <string name="submit">Submit</string>
     <string name="discard">Discard</string>
     <string name="send">Send</string>
+
+    <string name="type_blind">Tuna Netra</string>
+    <string name="type_deaf">Tuna Rungu</string>
+
     <string name="email">Email</string>
     <string name="password">Password</string>
     <string name="signup">SIGN UP</string>
@@ -29,4 +33,10 @@
     <string name="forgot_password">Forgot your Password? </string>
     <string name="not_a_member_register_now">Not a member? Register now!</string>
     <string name="reset_password">Reset Password</string>
+    <string name="tv_record_message">Press the button to start recording</string>
+
+    <string-array name="array_category">
+        <item>Category</item>
+        <item>Aktivitas</item>
+    </string-array>
 </resources>

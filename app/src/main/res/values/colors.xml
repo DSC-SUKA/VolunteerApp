@@ -9,6 +9,7 @@
     <color name="buttonDisabled">#F86B77</color>
     
     <color name="colorRed">#ff5e63</color>
+    <color name="colorDarkerRed">#d23035</color>
     <color name="colorBlue">#9dd1fb</color>
     <color name="buttonPositive">#27ae60</color>
     <color name="buttonPositiveDisabled">#9bdab6</color>

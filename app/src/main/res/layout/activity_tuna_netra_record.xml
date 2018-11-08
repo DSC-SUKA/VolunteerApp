@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@mipmap/bg_tunanetra_allbooks_extend">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <ImageButton
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="48dp"
+            android:src="@mipmap/btn_record"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:id="@+id/btn_record"/>
+
+        <TextView
+            android:id="@+id/tv_record_message"
+            android:layout_width="142dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="@string/tv_record_message" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="1"
+        android:layout_marginTop="16dp">
+        <Button
+            android:background="@drawable/button_discard_background"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:layout_marginTop="81dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginEnd="8dp"
+            android:textColor="@drawable/button_discard_text"
+            android:text="@string/discard"
+            android:id="@+id/btn_discard_record"/>
+        <Button
+            android:background="@drawable/button_background"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:layout_marginTop="81dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginEnd="16dp"
+            android:textColor="@android:color/white"
+            android:drawableRight="@drawable/ic_arrow_forward_white_24dp"
+            android:drawablePadding="2dp"
+            android:paddingLeft="38dp"
+            android:paddingRight="40dp"
+            android:text="@string/send"
+            android:drawableEnd="@drawable/ic_arrow_forward_white_24dp"
+            android:paddingStart="38dp"
+            android:paddingEnd="40dp"
+            android:id="@+id/btn_send_record"/>
+    </LinearLayout>
+
+</LinearLayout>

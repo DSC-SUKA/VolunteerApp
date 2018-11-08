@@ -21,7 +21,7 @@
             android:shape="rectangle"
             >
             <solid
-                android:color="@color/buttonDisabled"/>
+                android:color="@android:color/white"/>
             <stroke
                 android:width="1dp"
                 android:color="@color/newStatusbar" />
@@ -36,8 +36,8 @@
             <solid
                 android:color="@android:color/white"/>
             <stroke
-                android:width="3dp"
-                android:color="@color/buttonDisabled" />
+                android:width="2dp"
+                android:color="@color/colorRed" />
             <corners android:radius="40dp" />
         </shape>
     </item>

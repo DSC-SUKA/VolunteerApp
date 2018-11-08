@@ -7,6 +7,7 @@ android:orientation="vertical"
 tools:context=".fragment.MyContributionsFragment">
 
 <android.support.v7.widget.RecyclerView
+    android:id="@+id/rv_my_contribution"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     tools:listitem="@layout/my_contribution_item"/>

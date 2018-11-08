@@ -1,6 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:state_enabled="true">
+    <item android:state_pressed="true">
+        <shape
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:padding="16dp"
+            android:shape="rectangle"
+            >
+            <solid
+                android:color="@color/colorDarkerRed"/>
+            <corners android:radius="40dp" />
+        </shape>
+    </item>
+
+    <item android:state_enabled="false">
+        <shape
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:padding="16dp"
+            android:shape="rectangle">
+            <solid
+                android:color="@color/newStatusbar"/>
+            <corners android:radius="40dp" />
+        </shape>
+    </item>
+
+    <item>
         <shape
             xmlns:android="http://schemas.android.com/apk/res/android"
             android:padding="16dp"
@@ -11,14 +34,5 @@
             <corners android:radius="40dp" />
         </shape>
     </item>
-    <item>
-        <shape
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            android:padding="16dp"
-            android:shape="rectangle">
-            <solid
-                android:color="@color/newStatusbar"/>
-            <corners android:radius="40dp" />
-        </shape>
-    </item>
+
 </selector>
