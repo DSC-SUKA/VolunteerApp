@@ -1,4 +1,4 @@
-package com.dsc.suka.volunteerapp;
+package com.dsc.suka.volunteerapp.activity;
 
 import android.content.Intent;
 import android.media.MediaPlayer;
@@ -9,12 +9,12 @@ import android.os.SystemClock;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.dsc.suka.volunteerapp.R;
 import com.dsc.suka.volunteerapp.fragment.TunaNetraAlertDiscardDialog;
 
 import java.io.IOException;

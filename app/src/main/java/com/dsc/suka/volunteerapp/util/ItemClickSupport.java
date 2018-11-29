@@ -1,7 +1,9 @@
-package com.dsc.suka.volunteerapp;
+package com.dsc.suka.volunteerapp.util;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+
+import com.dsc.suka.volunteerapp.R;
 
 public class ItemClickSupport {
     private RecyclerView mRecyclerView;

@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.dsc.suka.volunteerapp.R;
+import com.dsc.suka.volunteerapp.model.ContributionItems;
 import com.dsc.suka.volunteerapp.model.RequestItems;
 
 import java.text.ParseException;
@@ -22,11 +23,11 @@ import java.util.List;
 import java.util.StringTokenizer;
 
 public class MyContributionAdapter extends RecyclerView.Adapter<MyContributionAdapter.MyContributionViewHolder>{
-    List<RequestItems> mRequestItemList;
+    List<ContributionItems> mContributionItemList;
     private Context context;
 
-    public MyContributionAdapter(List<RequestItems> requestItemsList, Context context){
-        mRequestItemList = requestItemsList;
+    public MyContributionAdapter(List<ContributionItems> contributionItemsList, Context context){
+        mContributionItemList = contributionItemsList;
         this.context = context;
     }
 
@@ -40,10 +41,10 @@ public class MyContributionAdapter extends RecyclerView.Adapter<MyContributionAd
 
     @Override
     public void onBindViewHolder(@NonNull MyContributionViewHolder holder, int position) {
-        holder.tvContributionName.setText(mRequestItemList.get(position).getRequesterName());
-        holder.tvContributionProdi.setText(mRequestItemList.get(position).getRequsterProdi());
+        holder.tvContributionName.setText(mContributionItemList.get(position).getRequesterName());
+        holder.tvContributionProdi.setText(mContributionItemList.get(position).getRequsterProdi());
 
-        String fullDate = mRequestItemList.get(position).getTime();
+        String fullDate = mContributionItemList.get(position).getTime();
         StringTokenizer tokenizer = new StringTokenizer(fullDate);
 
         String date = tokenizer.nextToken();
@@ -82,7 +83,7 @@ public class MyContributionAdapter extends RecyclerView.Adapter<MyContributionAd
             holder.tvContributionTime.setText(newDate);
         }
 
-        String photoUrl = mRequestItemList.get(position).getRequesterPhoto();
+        String photoUrl = mContributionItemList.get(position).getRequesterPhoto();
 
         RequestOptions options = new RequestOptions()
                 .centerCrop();
@@ -95,7 +96,7 @@ public class MyContributionAdapter extends RecyclerView.Adapter<MyContributionAd
 
     @Override
     public int getItemCount() {
-        return mRequestItemList.size();
+        return mContributionItemList.size();
     }
 
 

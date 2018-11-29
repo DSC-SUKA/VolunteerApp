@@ -12,8 +12,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.dsc.suka.volunteerapp.ItemClickSupport;
-import com.dsc.suka.volunteerapp.LatestContributionExtendedActivity;
+import com.dsc.suka.volunteerapp.util.ItemClickSupport;
+import com.dsc.suka.volunteerapp.activity.MyContributionExtendedActivity;
 import com.dsc.suka.volunteerapp.R;
 import com.dsc.suka.volunteerapp.adapter.LatestContributionAdapter;
 import com.dsc.suka.volunteerapp.model.ContributionItems;
@@ -34,15 +34,6 @@ public class HomeFragment extends Fragment {
     private ApiInterface mApiInterface;
     private RecyclerView recyclerView;
     private LatestContributionAdapter latestContributionAdapter;
-    private List<ContributionItems> contributionItemsList;
-
-    public List<ContributionItems> getContributionItemsList() {
-        return contributionItemsList;
-    }
-
-    public void setContributionItemsList(List<ContributionItems> contributionItemsList) {
-        this.contributionItemsList = contributionItemsList;
-    }
 
     public HomeFragment() {
         // Required empty public constructor
@@ -62,15 +53,6 @@ public class HomeFragment extends Fragment {
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(recyclerView.getContext(), layoutManager.getOrientation());
         recyclerView.addItemDecoration(dividerItemDecoration);
 
-        ItemClickSupport.addTo(recyclerView).setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
-            @Override
-            public void onItemClicked(RecyclerView recyclerView, int position, View v) {
-                Intent intent = new Intent(getContext(), LatestContributionExtendedActivity.class);
-                intent.putExtra(LatestContributionExtendedActivity.EXTRA_CONTRIBUTION, getContributionItemsList().get(position));
-                startActivity(intent);
-            }
-        });
-
         mApiInterface = ApiClient.getClient().create(ApiInterface.class);
         refresh();
 
@@ -83,7 +65,6 @@ public class HomeFragment extends Fragment {
             @Override
             public void onResponse(Call<ContributionModel> call, Response<ContributionModel> response) {
                 List<ContributionItems> contributionItems = response.body().getmContributionItems();
-                setContributionItemsList(contributionItems);
                 Log.d("Retrofit Get", "Request Count: " + String.valueOf(contributionItems.size()));
                 latestContributionAdapter = new LatestContributionAdapter(contributionItems, getContext());
                 recyclerView.setAdapter(latestContributionAdapter);

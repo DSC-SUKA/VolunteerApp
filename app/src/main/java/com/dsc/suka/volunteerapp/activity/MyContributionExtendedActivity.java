@@ -1,4 +1,4 @@
-package com.dsc.suka.volunteerapp;
+package com.dsc.suka.volunteerapp.activity;
 
 import android.media.MediaPlayer;
 import android.os.Handler;
@@ -10,6 +10,7 @@ import android.widget.ImageButton;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import com.dsc.suka.volunteerapp.R;
 import com.dsc.suka.volunteerapp.model.ContributionItems;
 
 import java.io.IOException;
@@ -18,7 +19,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.StringTokenizer;
 
-public class LatestContributionExtendedActivity extends AppCompatActivity implements View.OnClickListener, View.OnTouchListener, MediaPlayer.OnCompletionListener, MediaPlayer.OnBufferingUpdateListener {
+public class MyContributionExtendedActivity extends AppCompatActivity implements View.OnClickListener, View.OnTouchListener, MediaPlayer.OnCompletionListener, MediaPlayer.OnBufferingUpdateListener {
     private ContributionItems contributionItems;
     private TextView tvName, tvProdi, tvTime;
     public static String EXTRA_CONTRIBUTION = "contribution_extras";

@@ -1,4 +1,4 @@
-package com.dsc.suka.volunteerapp;
+package com.dsc.suka.volunteerapp.activity;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,6 +12,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
+
+import com.dsc.suka.volunteerapp.R;
 
 public class TunaNetraSendActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemSelectedListener {
     private EditText edtTitle;

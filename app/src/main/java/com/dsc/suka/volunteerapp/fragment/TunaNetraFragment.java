@@ -11,10 +11,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.dsc.suka.volunteerapp.ItemClickSupport;
+import com.dsc.suka.volunteerapp.util.ItemClickSupport;
 import com.dsc.suka.volunteerapp.R;
 import com.dsc.suka.volunteerapp.adapter.RequestAdapter;
-import com.dsc.suka.volunteerapp.TunaNetraRecordActivity;
+import com.dsc.suka.volunteerapp.activity.TunaNetraRecordActivity;
 import com.dsc.suka.volunteerapp.model.RequestItems;
 import com.dsc.suka.volunteerapp.model.RequestModel;
 import com.dsc.suka.volunteerapp.rest.ApiClient;
