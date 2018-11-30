@@ -1,4 +1,4 @@
-package com.dsc.suka.volunteerapp.rest;
+package com.dsc.suka.volunteerapp.network;
 
 import com.dsc.suka.volunteerapp.model.ContributionModel;
 import com.dsc.suka.volunteerapp.model.RequestModel;

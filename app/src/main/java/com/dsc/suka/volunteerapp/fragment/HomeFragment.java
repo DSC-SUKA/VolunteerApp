@@ -1,7 +1,6 @@
 package com.dsc.suka.volunteerapp.fragment;
 
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DividerItemDecoration;
@@ -12,14 +11,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.dsc.suka.volunteerapp.util.ItemClickSupport;
-import com.dsc.suka.volunteerapp.activity.MyContributionExtendedActivity;
 import com.dsc.suka.volunteerapp.R;
 import com.dsc.suka.volunteerapp.adapter.LatestContributionAdapter;
 import com.dsc.suka.volunteerapp.model.ContributionItems;
 import com.dsc.suka.volunteerapp.model.ContributionModel;
-import com.dsc.suka.volunteerapp.rest.ApiClient;
-import com.dsc.suka.volunteerapp.rest.ApiInterface;
+import com.dsc.suka.volunteerapp.network.ApiClient;
+import com.dsc.suka.volunteerapp.network.ApiInterface;
 
 import java.util.List;
 

@@ -12,18 +12,15 @@ import android.widget.TextView;
 
 import com.dsc.suka.volunteerapp.R;
 import com.dsc.suka.volunteerapp.model.ContributionItems;
+import com.dsc.suka.volunteerapp.util.DateTime;
 
-import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.StringTokenizer;
 
 public class MyContributionExtendedActivity extends AppCompatActivity implements View.OnClickListener, View.OnTouchListener, MediaPlayer.OnCompletionListener, MediaPlayer.OnBufferingUpdateListener {
     private ContributionItems contributionItems;
     private TextView tvName, tvProdi, tvTime;
     public static String EXTRA_CONTRIBUTION = "contribution_extras";
-    private ImageButton btnPlay;
+    private ImageButton btnPlay, btnStop, btnRestart;
     private boolean isPaused;
     private SeekBar seekBarProgrress;
     private String audioUrl = "https://drive.google.com/file/d/1YNv1z1DKStr6xr9Sj9ihTa55pW3n6EoB/view";
@@ -39,8 +36,14 @@ public class MyContributionExtendedActivity extends AppCompatActivity implements
         tvName = findViewById(R.id.tv_extended_contribution_name);
         tvProdi = findViewById(R.id.tv_extended_contribution_prodi);
         tvTime = findViewById(R.id.tv_extended_contribution_time);
-        btnPlay = findViewById(R.id.btn_pause);
+        btnPlay = findViewById(R.id.btn_play_contribution_extended);
         btnPlay.setOnClickListener(this);
+
+        btnStop = findViewById(R.id.btn_stop_contribution_extended);
+        btnStop.setOnClickListener(this);
+
+        btnRestart = findViewById(R.id.btn_restart_contribution_extended);
+        btnRestart.setOnClickListener(this);
 
         isPaused = true;
 
@@ -53,17 +56,7 @@ public class MyContributionExtendedActivity extends AppCompatActivity implements
         StringTokenizer tokenizer = new StringTokenizer(fullDate);
 
         String date = tokenizer.nextToken();
-
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        Date tempDate = null;
-        try {
-            tempDate = sdf.parse(date);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-        SimpleDateFormat newFormat = new SimpleDateFormat("dd / MM / yyyy");
-        String newDate = newFormat.format(tempDate);
+        String newDate = DateTime.dateTimeParser(date,"yyyy-MM-dd", "dd / MM / yyyy");
 
         tvTime.setText(newDate);
 
@@ -97,19 +90,40 @@ public class MyContributionExtendedActivity extends AppCompatActivity implements
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.btn_pause:
+            case R.id.btn_play_contribution_extended:
                 mediaFileLengtInMilis = mediaPlayer.getDuration();
 
                 if (isPaused) {
 
                     mediaPlayer.start();
                     btnPlay.setImageDrawable(getResources().getDrawable(R.drawable.ic_pause_blue_24dp));
-                    isPaused = !isPaused;
+                    isPaused = false;
 
                 } else {
                     mediaPlayer.pause();
                     btnPlay.setImageDrawable(getResources().getDrawable(R.drawable.ic_play_arrow_red_24dp));
-                    isPaused = !isPaused;
+                    isPaused = true;
+                }
+                primarySeekBarProggressUpdater();
+                break;
+            case R.id.btn_stop_contribution_extended:
+
+                if (mediaPlayer != null){
+                    if (mediaPlayer.isPlaying()){
+                        btnPlay.setImageDrawable(getResources().getDrawable(R.drawable.ic_play_arrow_red_24dp));
+                        mediaPlayer.pause();
+                        mediaPlayer.seekTo(0);
+                        isPaused = true;
+                    }
+                }
+                primarySeekBarProggressUpdater();
+                break;
+            case R.id.btn_restart_contribution_extended:
+                if (mediaPlayer != null){
+                    btnPlay.setImageDrawable(getResources().getDrawable(R.drawable.ic_pause_blue_24dp));
+                    mediaPlayer.seekTo(0);
+                    mediaPlayer.start();
+                    isPaused = false;
                 }
                 primarySeekBarProggressUpdater();
                 break;

@@ -1,4 +1,4 @@
-package com.dsc.suka.volunteerapp.rest;
+package com.dsc.suka.volunteerapp.network;
 
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
