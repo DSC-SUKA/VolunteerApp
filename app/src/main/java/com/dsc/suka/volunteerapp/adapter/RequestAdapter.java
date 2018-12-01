@@ -1,7 +1,6 @@
 package com.dsc.suka.volunteerapp.adapter;
 
 import android.content.Context;
-import android.media.MediaPlayer;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.RecyclerView;
@@ -17,20 +16,21 @@ import com.dsc.suka.volunteerapp.R;
 import com.dsc.suka.volunteerapp.model.RequestItems;
 import com.dsc.suka.volunteerapp.util.DateTime;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.StringTokenizer;
 
-public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.ViewHolder>{
+public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.ViewHolder> {
     List<RequestItems> mRequestItemsList;
     private Context context;
+    private RequestAdapterClickListener mListener;
+    private int mCurrentPlayingPosition = -1;
 
-    public RequestAdapter(List<RequestItems> requestItemsList, Context context){
+    public RequestAdapter(List<RequestItems> requestItemsList, Context context, RequestAdapterClickListener listener) {
         mRequestItemsList = requestItemsList;
         this.context = context;
+        mListener = listener;
     }
 
     @NonNull
@@ -43,12 +43,13 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.bind(mRequestItemsList.get(position));
+        holder.bind(mRequestItemsList.get(position), position, mListener);
+
     }
 
     @Override
     public int getItemCount() {
-        if (mRequestItemsList != null){
+        if (mRequestItemsList != null) {
             return mRequestItemsList.size();
         } else {
             return 0;
@@ -56,13 +57,11 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.ViewHold
     }
 
 
-
     public class ViewHolder extends RecyclerView.ViewHolder {
         public TextView tvRequesterName, tvRequesterProdi, tvRequestTime;
         public ImageView imgRequesterPhoto;
         public FloatingActionButton fabPlay;
-        MediaPlayer mediaPlayer;
-        boolean isPlay = false;
+        boolean isPlaying = false;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -73,7 +72,13 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.ViewHold
             fabPlay = itemView.findViewById(R.id.fab_play_request_item);
         }
 
-        public void bind(final RequestItems requestItems){
+        public void bind(final RequestItems requestItems,final int position, final RequestAdapterClickListener listener) {
+            if (mCurrentPlayingPosition == position){
+                fabPlay.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_pause_blue_24dp));
+            } else {
+                fabPlay.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_play_arrow_red_24dp));
+                isPlaying = false;
+            }
             tvRequesterName.setText(requestItems.requesterName);
             tvRequesterProdi.setText(requestItems.requsterProdi);
 
@@ -87,8 +92,8 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.ViewHold
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             String today = sdf.format(calendar.getTime());
 
-            if (today.equalsIgnoreCase(date)){
-                String newTime = DateTime.dateTimeParser(time,"hh:mm:ss","hh:mm:ss" );
+            if (today.equalsIgnoreCase(date)) {
+                String newTime = DateTime.dateTimeParser(time, "hh:mm:ss", "hh:mm:ss");
                 tvRequestTime.setText(newTime);
 
             } else {
@@ -106,35 +111,37 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.ViewHold
                     .apply(options)
                     .into(imgRequesterPhoto);
 
-            String audioURl = "https://drive.google.com/file/d/1YNv1z1DKStr6xr9Sj9ihTa55pW3n6EoB/view";
-
-            if (mediaPlayer == null){
-                mediaPlayer = new MediaPlayer();
-                mediaPlayer = MediaPlayer.create(itemView.getContext(), R.raw.cek);
-            }
-
-            mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                @Override
-                public void onCompletion(MediaPlayer mp) {
-                    fabPlay.setImageDrawable(itemView.getContext().getResources().getDrawable(R.drawable.ic_play_arrow_red_24dp));
-                    isPlay = false;
-                }
-            });
+            final String audioURl = "";
 
             fabPlay.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (isPlay){
-                        mediaPlayer.pause();
+                    int previousPosition = mCurrentPlayingPosition;
+
+                    if (isPlaying) {
+                        mCurrentPlayingPosition = -1;
+
+                        listener.onClickListener(audioURl, getAdapterPosition(), isPlaying);
                         fabPlay.setImageDrawable(itemView.getContext().getResources().getDrawable(R.drawable.ic_play_arrow_red_24dp));
-                        isPlay = false;
+                        isPlaying = false;
                     } else {
-                        mediaPlayer.start();
+                        mCurrentPlayingPosition = getAdapterPosition();
+
+                        listener.onClickListener(audioURl, getAdapterPosition(), isPlaying);
                         fabPlay.setImageDrawable(itemView.getContext().getResources().getDrawable(R.drawable.ic_pause_blue_24dp));
-                        isPlay = true;
+                        isPlaying = true;
+                    }
+
+                    if (previousPosition != -1){
+                        notifyItemChanged(previousPosition);
                     }
                 }
             });
         }
     }
+
+    public interface RequestAdapterClickListener{
+        void onClickListener(String audioUrl, int adapterPosition, boolean isPlaying);
+    }
+
 }

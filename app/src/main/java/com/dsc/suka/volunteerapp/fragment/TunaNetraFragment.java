@@ -2,6 +2,9 @@ package com.dsc.suka.volunteerapp.fragment;
 
 
 import android.content.Intent;
+import android.content.res.AssetFileDescriptor;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -20,6 +23,7 @@ import com.dsc.suka.volunteerapp.model.RequestItems;
 import com.dsc.suka.volunteerapp.network.ApiClient;
 import com.dsc.suka.volunteerapp.network.ApiInterface;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -31,7 +35,8 @@ public class TunaNetraFragment extends Fragment implements TunaNetraView {
     private RequestAdapter mAdapter;
     private List<RequestItems> requestItems;
     private TunaNetraPresenter presenter;
-
+    private MediaPlayer mp;
+    private int currentPlayPosition;
 
 
     public TunaNetraFragment() {
@@ -58,12 +63,35 @@ public class TunaNetraFragment extends Fragment implements TunaNetraView {
         });
 
 
-
         ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
         presenter = new TunaNetraPresenter(this, apiInterface);
         presenter.getRequestList();
 
+
         return v;
+    }
+
+    private void playMedia(String url){
+        if (mp == null){
+            mp = new MediaPlayer();
+        } else {
+            mp.reset();
+        }
+        mp.setAudioStreamType(AudioManager.STREAM_MUSIC);
+        AssetFileDescriptor afd = getContext().getResources().openRawResourceFd(R.raw.cek);
+
+        try {
+            mp.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            mp.prepare();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        mp.start();
     }
 
     @Override
@@ -79,8 +107,28 @@ public class TunaNetraFragment extends Fragment implements TunaNetraView {
     @Override
     public void showRequestList(List<RequestItems> requestData) {
         requestItems = requestData;
-        mAdapter = new RequestAdapter(requestItems, getContext());
+
+        mAdapter = new RequestAdapter(requestItems, getContext(), new RequestAdapter.RequestAdapterClickListener() {
+            @Override
+            public void onClickListener(String audioUrl, int adapterPosition, boolean isPlaying) {
+                if (isPlaying){
+                    mp.pause();
+                } else {
+                    playMedia(audioUrl);
+                }
+            }
+        });
         mRecyclerView.setAdapter(mAdapter);
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (mp != null){
+            if (mp.isPlaying()){
+                mp.stop();
+            }
+            mp.release();
+        }
+    }
 }

@@ -18,7 +18,9 @@ import com.dsc.suka.volunteerapp.model.ContributionItems;
 import com.dsc.suka.volunteerapp.model.ContributionModel;
 import com.dsc.suka.volunteerapp.network.ApiClient;
 import com.dsc.suka.volunteerapp.network.ApiInterface;
+import com.dsc.suka.volunteerapp.presenter.ContributionPresenter;
 import com.dsc.suka.volunteerapp.util.ItemClickSupport;
+import com.dsc.suka.volunteerapp.view.ContributionView;
 
 import java.util.List;
 
@@ -29,11 +31,12 @@ import retrofit2.Response;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class MyContributionsFragment extends Fragment {
+public class MyContributionsFragment extends Fragment implements ContributionView {
     ApiInterface mApiInterface;
     private RecyclerView mRecyclerView;
     private MyContributionAdapter mAdapter;
     private List<ContributionItems> mContributionItemsList;
+    private ContributionPresenter presenter;
 
     public List<ContributionItems> getmContributionItemsList() {
         return mContributionItemsList;
@@ -67,29 +70,26 @@ public class MyContributionsFragment extends Fragment {
         });
 
         mApiInterface = ApiClient.getClient().create(ApiInterface.class);
-        refresh();
+        presenter = new ContributionPresenter(this, mApiInterface);
+        presenter.getMyContributionList();
 
         return view;
     }
 
-    private void refresh() {
-        Call<ContributionModel> requestModelCall = mApiInterface.getMyContribution();
-        requestModelCall.enqueue(new Callback<ContributionModel>() {
-            @Override
-            public void onResponse(Call<ContributionModel> call, Response<ContributionModel> response) {
-                List<ContributionItems> contributionItemsList = response.body().getmContributionItems();
-                Log.d("Retrofit Get", "Request Count: " + String.valueOf(contributionItemsList.size()));
-                setmContributionItemsList(contributionItemsList);
-                mAdapter = new MyContributionAdapter(contributionItemsList, getContext());
-                mRecyclerView.setAdapter(mAdapter);
-            }
+    @Override
+    public void showLoading() {
 
-            @Override
-            public void onFailure(Call<ContributionModel> call, Throwable t) {
-                Log.e("Retrofit Get", t.toString());
-
-            }
-        });
     }
 
+    @Override
+    public void hideLoading() {
+
+    }
+
+    @Override
+    public void showContributionList(List<ContributionItems> contributionData) {
+        setmContributionItemsList(contributionData);
+        mAdapter = new MyContributionAdapter(mContributionItemsList, getContext());
+        mRecyclerView.setAdapter(mAdapter);
+    }
 }
