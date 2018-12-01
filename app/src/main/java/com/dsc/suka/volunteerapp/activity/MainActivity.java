@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        if (savedInstanceState == null ){
+        if (savedInstanceState == null) {
             FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
             fragmentTransaction.replace(R.id.fl_content, new HomeFragment());
             fragmentTransaction.commit();
@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity
                 break;
         }
 
-        if (fragment!= null){
+        if (fragment != null) {
             getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.fl_content, fragment)
