@@ -1,11 +1,15 @@
 package com.dsc.suka.volunteerapp.activity;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.SystemClock;
+import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -13,13 +17,15 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.dsc.suka.volunteerapp.R;
 import com.dsc.suka.volunteerapp.fragment.TunaNetraAlertDiscardDialog;
+import com.dsc.suka.volunteerapp.util.PermissionManager;
 
 import java.io.IOException;
 
-public class TunaNetraRecordActivity extends AppCompatActivity implements View.OnClickListener{
+public class TunaNetraRecordActivity extends AppCompatActivity implements View.OnClickListener {
     private static final String EXTRA_REQUEST_ID = "request_id_extras";
     private Button btnSend, btnDiscard;
     private ImageButton btnRecord;
@@ -30,6 +36,9 @@ public class TunaNetraRecordActivity extends AppCompatActivity implements View.O
     long timeInMilis = 0L, timeSwapBuff = 0L, updatedTime = 0L;
     private MediaRecorder myAudioRecorder;
     private String outputFile;
+    private String[] permissionNeeded = {Manifest.permission.RECORD_AUDIO, Manifest.permission.WRITE_EXTERNAL_STORAGE};
+    private final int REQUEST_CODE_RECORD_ACTIVITY = 111;
+    private MediaPlayer mediaPlayer;
 
 
     @Override
@@ -37,7 +46,9 @@ public class TunaNetraRecordActivity extends AppCompatActivity implements View.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tuna_netra_record);
 
-        setRecorder();
+        if (!PermissionManager.hasPermissions(this, permissionNeeded)) {
+            requestPermissions();
+        }
 
         isRecorded = false;
         isRecordPaused = true;
@@ -58,57 +69,71 @@ public class TunaNetraRecordActivity extends AppCompatActivity implements View.O
         btnRecord.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (isRecorded == false){
-                    if (isRecording == false){
-                        try {
-                            myAudioRecorder.prepare();
-                            myAudioRecorder.start();
-                            startHTime = SystemClock.uptimeMillis();
-                            handler.postDelayed(updateTimer, 0);
-                        } catch (IllegalStateException ise){
-                            ise.printStackTrace();
-                        } catch (IOException e){
-                            e.printStackTrace();
+                if (PermissionManager.hasPermissions(getApplicationContext(), permissionNeeded)) {
+                    if (isRecorded == false) {
+                        if (isRecording == false) {
+                            setRecorder();
+                            try {
+                                myAudioRecorder.prepare();
+                                myAudioRecorder.start();
+                                startHTime = SystemClock.uptimeMillis();
+                                handler.postDelayed(updateTimer, 0);
+                            } catch (IllegalStateException ise) {
+                                ise.printStackTrace();
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+
+                            setStopButton();
+                            isRecording = true;
+                        } else {
+                            myAudioRecorder.stop();
+                            myAudioRecorder.release();
+                            myAudioRecorder = null;
+
+                            timeSwapBuff += timeInMilis;
+                            handler.removeCallbacks(updateTimer);
+
+                            setPlayButton();
+                            isRecording = false;
+                            isRecorded = true;
+                            btnSend.setEnabled(true);
+                            btnDiscard.setEnabled(true);
                         }
-
-                        setStopButton();
-                        isRecording = true;
                     } else {
-                        myAudioRecorder.stop();
-                        myAudioRecorder.release();
-                        myAudioRecorder = null;
-
-                        timeSwapBuff += timeInMilis;
-                        handler.removeCallbacks(updateTimer);
-
-                        setPlayButton();
-                        isRecording = !isRecording;
-                        isRecorded = true;
-                        btnSend.setEnabled(true);
-                        btnDiscard.setEnabled(true);
-                    }
-                } else if (isRecorded){
-                    final MediaPlayer mediaPlayer = new MediaPlayer();
-                    mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
-                        @Override
-                        public void onCompletion(MediaPlayer mp) {
+                        if (isRecordPaused) {
+                            setAudioPlayer(outputFile);
+                            mediaPlayer.start();
+                            setStopButton();
+                            isRecordPaused = false;
+                        } else {
+                            stopAudioRecorded(mediaPlayer, outputFile);
                             setPlayButton();
                             isRecordPaused = true;
                         }
-                    });
-                    if (isRecordPaused){
-                        playAudioRecorded(mediaPlayer, outputFile);
-                        setStopButton();
-                        isRecordPaused = !isRecordPaused;
-                    } else {
-                        stopAudioRecorded(mediaPlayer, outputFile);
-                        setPlayButton();
-                        isRecordPaused = !isRecordPaused;
                     }
+                } else {
+                    Toast.makeText(getApplicationContext(), "You need permission to use this feature", Toast.LENGTH_SHORT).show();
+                    requestPermissions();
                 }
             }
         });
 
+    }
+
+    private void requestPermissions() {
+        PermissionManager.requestPermissions(this, permissionNeeded, REQUEST_CODE_RECORD_ACTIVITY);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == REQUEST_CODE_RECORD_ACTIVITY) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(this, "Permission Granted", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "Permission Denied", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     private void setRecorder() {
@@ -121,29 +146,41 @@ public class TunaNetraRecordActivity extends AppCompatActivity implements View.O
     }
 
     private void stopAudioRecorded(MediaPlayer mediaPlayer, String outputFile) {
-        if (mediaPlayer != null){
+        if (mediaPlayer != null) {
+            mediaPlayer.pause();
+            mediaPlayer.seekTo(0);
+
+        }
+    }
+
+    private void setAudioPlayer(String outputFile) {
+        if (mediaPlayer == null){
+            mediaPlayer = new MediaPlayer();
+            mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
             try {
-                mediaPlayer.stop();
-                mediaPlayer.reset();
-                mediaPlayer.release();
-            } catch (Exception e){
+                mediaPlayer.setDataSource(outputFile);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            try {
+                mediaPlayer.prepare();
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }
+
+        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                setPlayButton();
+                isRecordPaused = true;
+            }
+        });
     }
 
-    private void playAudioRecorded(MediaPlayer mediaPlayer, String outputFile) {
-        try {
-            mediaPlayer.setDataSource(outputFile);
-            mediaPlayer.prepare();
-            mediaPlayer.start();
-        } catch (Exception e){
-            e.printStackTrace();
-        }
-    }
 
-
-    private void setRecordButton(){
+    private void setRecordButton() {
         btnRecord.setImageDrawable(getResources().getDrawable(R.mipmap.btn_record));
     }
 
@@ -157,13 +194,13 @@ public class TunaNetraRecordActivity extends AppCompatActivity implements View.O
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.btn_discard_record:
                 TunaNetraAlertDiscardDialog alertDialog = new TunaNetraAlertDiscardDialog();
                 alertDialog.setOnOptionDialogListener(new TunaNetraAlertDiscardDialog.OnOptionDialogListener() {
                     @Override
                     public void onOptionChoosen(boolean optionsChoosen) {
-                        if (optionsChoosen){
+                        if (optionsChoosen) {
                             resetRecord();
                         }
                     }
@@ -188,7 +225,7 @@ public class TunaNetraRecordActivity extends AppCompatActivity implements View.O
             int secs = (int) (updatedTime / 1000);
             int mins = secs / 60;
             secs = secs % 60;
-            if (tvRecordMessage != null){
+            if (tvRecordMessage != null) {
                 tvRecordMessage.setText("" + String.format("%02d", mins) + ":" + String.format("%02d", secs));
                 handler.postDelayed(this, 0);
             }
@@ -196,6 +233,15 @@ public class TunaNetraRecordActivity extends AppCompatActivity implements View.O
     };
 
     private void resetRecord() {
+        if (mediaPlayer != null){
+            if (mediaPlayer.isPlaying()){
+                mediaPlayer.stop();
+            }
+            mediaPlayer.release();
+            mediaPlayer = null;
+        }
+
+
         isRecorded = false;
         isRecordPaused = true;
         isRecording = false;
@@ -211,11 +257,21 @@ public class TunaNetraRecordActivity extends AppCompatActivity implements View.O
         setRecorder();
     }
 
-    private void resetRecordMessage(){
+    private void resetRecordMessage() {
         startHTime = 0L;
         timeInMilis = 0L;
         timeSwapBuff = 0L;
         updatedTime = 0L;
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (mediaPlayer != null){
+            if (mediaPlayer.isPlaying()){
+                mediaPlayer.stop();
+            }
+            mediaPlayer.release();
+        }
+    }
 }
