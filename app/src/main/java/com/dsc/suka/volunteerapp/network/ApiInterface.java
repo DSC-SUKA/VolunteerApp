@@ -1,4 +1,4 @@
-package com.dsc.suka.volunteerapp.rest;
+package com.dsc.suka.volunteerapp.network;
 
 import com.dsc.suka.volunteerapp.model.ContributionModel;
 import com.dsc.suka.volunteerapp.model.RequestModel;
@@ -10,8 +10,8 @@ public interface ApiInterface {
     @GET("request_contribution")
     Call<RequestModel> getRequests();
 
-    @GET("my_contribution")
-    Call<RequestModel> getContribution();
+    @GET("latest_contribution")
+    Call<ContributionModel> getMyContribution();
 
     @GET("latest_contribution")
     Call<ContributionModel> getLatestContribution();

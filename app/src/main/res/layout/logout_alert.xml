@@ -8,7 +8,7 @@
     android:elevation="@dimen/activity_horizontal_margin"
     android:orientation="vertical"
     android:padding="16dp"
-    tools:context=".fragment.logout_alert">
+    tools:context=".fragment.LogoutAlert">
 
     <ImageView
         android:layout_width="match_parent"
