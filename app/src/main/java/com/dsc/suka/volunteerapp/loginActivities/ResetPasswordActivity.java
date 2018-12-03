@@ -1,4 +1,4 @@
-package com.dsc.suka.volunteerapp.login;
+package com.dsc.suka.volunteerapp.loginActivities;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;

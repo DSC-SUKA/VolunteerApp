@@ -15,10 +15,16 @@ import com.dsc.suka.volunteerapp.R;
 import com.dsc.suka.volunteerapp.adapter.LatestContributionAdapter;
 import com.dsc.suka.volunteerapp.model.ContributionItems;
 import com.dsc.suka.volunteerapp.model.ContributionModel;
-import com.dsc.suka.volunteerapp.network.ApiClient;
-import com.dsc.suka.volunteerapp.network.ApiInterface;
+
+import com.dsc.suka.volunteerapp.service.ApiClient;
+import com.dsc.suka.volunteerapp.service.ApiInterface;
+
 import com.dsc.suka.volunteerapp.presenter.ContributionPresenter;
 import com.dsc.suka.volunteerapp.view.ContributionView;
+
+import com.dsc.suka.volunteerapp.network.ApiClient;
+import com.dsc.suka.volunteerapp.network.ApiInterface;
+
 
 import java.util.List;
 

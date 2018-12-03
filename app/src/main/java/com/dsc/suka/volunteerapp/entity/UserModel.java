@@ -5,72 +5,87 @@ import android.os.Parcelable;
 
 import com.google.gson.annotations.SerializedName;
 
-public class UsersModel implements Parcelable {
+public class UserModel implements Parcelable {
 
     @SerializedName("userId")
-    private int uid;
+    private String userId;
     @SerializedName("emailAddress")
-    private int emailAdrs;
+    private String emailAdrs;
     @SerializedName("phoneNumb")
-    private int phoneNumb;
+    private String phoneNumb;
     @SerializedName("name")
-    private int name;
+    private String name;
     @SerializedName("imageUrl")
-    private int imageUrl;
+    private String imageUrl;
+    @SerializedName("userAvatar")
+    private String userAva;
 
-    public int getEmailAdrs() {
+    public String getEmailAdrs() {
         return emailAdrs;
     }
 
-    public void setEmailAdrs(int emailAdrs) {
+    public void setEmailAdrs(String emailAdrs) {
         this.emailAdrs = emailAdrs;
     }
 
-    public int getPhoneNumb() {
+    public String getPhoneNumb() {
         return phoneNumb;
     }
 
-    public void setPhoneNumb(int phoneNumb) {
+    public void setPhoneNumb(String phoneNumb) {
         this.phoneNumb = phoneNumb;
     }
 
-    public int getName() {
+    public String getName() {
         return name;
     }
 
-    public void setName(int name) {
+    public void setName(String name) {
         this.name = name;
     }
 
-    public int getImageUrl() {
+    public String getImageUrl() {
         return imageUrl;
     }
 
-    public void setImageUrl(int imageUrl) {
+    public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
     }
 
-    public int getUid() {
-        return uid;
+    public String getUid() {
+        return userId;
     }
 
-    public void setUid(int uid) {
-        this.uid = uid;
+    public void setUid(String userId) {
+        this.userId = userId;
     }
 
-    private UsersModel(Parcel in) {
-        uid = in.readInt();
+    public void setUserAva(String userAva) {
+        this.userAva = userAva;
     }
 
-    public static final Creator<UsersModel> CREATOR = new Creator<UsersModel>() {
+    public String getUserAva() {
+        return userAva;
+    }
+
+    private UserModel(Parcel in) {
+        userId = in.readString();
+        phoneNumb = in.readString();
+        emailAdrs = in.readString();
+        name = in.readString();
+        imageUrl = in.readString();
+        userAva = in.readString();
+    }
+
+    public static final Creator<UserModel> CREATOR = new Creator<UserModel>() {
         @Override
-        public UsersModel createFromParcel(Parcel in) {
-            return new UsersModel(in);
+        public UserModel createFromParcel(Parcel in) {
+            return new UserModel(in);
         }
 
         @Override
-        public UsersModel[] newArray(int size) {
-            return new UsersModel[size];
+        public UserModel[] newArray(int size) {
+            return new UserModel[size];
         }
     };
 
@@ -81,6 +96,11 @@ public class UsersModel implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(uid);
+        dest.writeString(userId);
+        dest.writeString(phoneNumb);
+        dest.writeString(emailAdrs);
+        dest.writeString(name);
+        dest.writeString(imageUrl);
+        dest.writeString(userAva);
     }
 }

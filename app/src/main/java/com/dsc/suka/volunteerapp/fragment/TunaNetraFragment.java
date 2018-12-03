@@ -20,8 +20,11 @@ import com.dsc.suka.volunteerapp.R;
 import com.dsc.suka.volunteerapp.adapter.RequestAdapter;
 import com.dsc.suka.volunteerapp.activity.TunaNetraRecordActivity;
 import com.dsc.suka.volunteerapp.model.RequestItems;
-import com.dsc.suka.volunteerapp.network.ApiClient;
-import com.dsc.suka.volunteerapp.network.ApiInterface;
+
+import com.dsc.suka.volunteerapp.model.RequestModel;
+import com.dsc.suka.volunteerapp.service.ApiClient;
+import com.dsc.suka.volunteerapp.service.ApiInterface;
+
 
 import java.io.IOException;
 import java.util.List;
