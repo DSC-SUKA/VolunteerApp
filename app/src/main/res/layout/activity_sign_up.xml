@@ -8,7 +8,7 @@
     android:gravity="center"
     android:paddingLeft="@dimen/space"
     android:paddingRight="@dimen/space"
-    tools:context=".login.SignUpActivity">
+    tools:context=".loginActivities.SignUpActivity">
     <ImageView
         android:id="@+id/img_logo"
         android:layout_width="100dp"
@@ -28,8 +28,8 @@
             android:layout_height="wrap_content"
             android:hint="@string/email"
             android:inputType="textEmailAddress"
-            android:drawableEnd="@drawable/ic_email_black_24dp"
-            android:drawableRight="@drawable/ic_email_black_24dp"/>
+            android:drawableEnd="@drawable/ic_email_grey_24dp"
+            android:drawableRight="@drawable/ic_email_grey_24dp"/>
 
     </android.support.design.widget.TextInputLayout>
 
@@ -43,8 +43,8 @@
             android:layout_height="wrap_content"
             android:hint="@string/password"
             android:inputType="textPassword"
-            android:drawableEnd="@drawable/ic_lock_black_24dp"
-            android:drawableRight="@drawable/ic_lock_black_24dp"/>
+            android:drawableEnd="@drawable/ic_email_grey_24dp"
+            android:drawableRight="@drawable/ic_email_grey_24dp"/>
 
     </android.support.design.widget.TextInputLayout>
 

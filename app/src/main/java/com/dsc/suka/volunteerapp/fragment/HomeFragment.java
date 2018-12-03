@@ -18,8 +18,8 @@ import com.dsc.suka.volunteerapp.R;
 import com.dsc.suka.volunteerapp.adapter.LatestContributionAdapter;
 import com.dsc.suka.volunteerapp.model.ContributionItems;
 import com.dsc.suka.volunteerapp.model.ContributionModel;
-import com.dsc.suka.volunteerapp.rest.ApiClient;
-import com.dsc.suka.volunteerapp.rest.ApiInterface;
+import com.dsc.suka.volunteerapp.service.ApiClient;
+import com.dsc.suka.volunteerapp.service.ApiInterface;
 
 import java.util.List;
 
