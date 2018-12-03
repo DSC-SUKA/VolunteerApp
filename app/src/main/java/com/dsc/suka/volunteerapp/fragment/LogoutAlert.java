@@ -12,10 +12,10 @@ import com.dsc.suka.volunteerapp.R;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class logout_alert extends Fragment {
+public class LogoutAlert extends Fragment {
 
 
-    public logout_alert() {
+    public LogoutAlert() {
         // Required empty public constructor
     }
 

@@ -10,10 +10,8 @@ import android.widget.TextView;
 
 import com.dsc.suka.volunteerapp.R;
 import com.dsc.suka.volunteerapp.model.ContributionItems;
+import com.dsc.suka.volunteerapp.util.DateTime;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.StringTokenizer;
 
@@ -59,16 +57,7 @@ public class LatestContributionAdapter extends RecyclerView.Adapter<LatestContri
 
         String date = tokenizer.nextToken();
 
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        Date tempDate = null;
-        try {
-            tempDate = sdf.parse(date);
-        } catch (ParseException e){
-            e.printStackTrace();
-        }
-
-        SimpleDateFormat newFormat = new SimpleDateFormat("dd/MM/yyyy");
-        String newDate = newFormat.format(tempDate);
+        String newDate = DateTime.dateTimeParser(date, "yyyy-MM-dd", "dd/MM/yyyy");
 
         holder.requestTime.setText(newDate);
     }

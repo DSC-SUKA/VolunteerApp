@@ -1,4 +1,4 @@
-package com.dsc.suka.volunteerapp;
+package com.dsc.suka.volunteerapp.activity;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -15,9 +15,11 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.dsc.suka.volunteerapp.R;
 import com.dsc.suka.volunteerapp.fragment.HomeFragment;
 import com.dsc.suka.volunteerapp.fragment.MyContributionsFragment;
 import com.dsc.suka.volunteerapp.fragment.TunaNetraFragment;
+import com.dsc.suka.volunteerapp.fragment.TunaRunguFragment;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -39,7 +41,7 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        if (savedInstanceState == null ){
+        if (savedInstanceState == null) {
             FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
             fragmentTransaction.replace(R.id.fl_content, new HomeFragment());
             fragmentTransaction.commit();
@@ -70,14 +72,14 @@ public class MainActivity extends AppCompatActivity
                 fragment = new TunaNetraFragment();
                 break;
             case R.id.nav_tuna_rungu:
-
+                fragment = new TunaRunguFragment();
                 break;
             case R.id.nav_my_contributions:
                 fragment = new MyContributionsFragment();
                 break;
         }
 
-        if (fragment!= null){
+        if (fragment != null) {
             getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.fl_content, fragment)

@@ -2,37 +2,44 @@ package com.dsc.suka.volunteerapp.fragment;
 
 
 import android.content.Intent;
+import android.content.res.AssetFileDescriptor;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.dsc.suka.volunteerapp.ItemClickSupport;
+import com.dsc.suka.volunteerapp.presenter.TunaNetraPresenter;
+import com.dsc.suka.volunteerapp.view.TunaNetraView;
+import com.dsc.suka.volunteerapp.util.ItemClickSupport;
 import com.dsc.suka.volunteerapp.R;
 import com.dsc.suka.volunteerapp.adapter.RequestAdapter;
-import com.dsc.suka.volunteerapp.TunaNetraRecordActivity;
+import com.dsc.suka.volunteerapp.activity.TunaNetraRecordActivity;
 import com.dsc.suka.volunteerapp.model.RequestItems;
+
 import com.dsc.suka.volunteerapp.model.RequestModel;
 import com.dsc.suka.volunteerapp.service.ApiClient;
 import com.dsc.suka.volunteerapp.service.ApiInterface;
 
-import java.util.List;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import java.io.IOException;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class TunaNetraFragment extends Fragment {
+public class TunaNetraFragment extends Fragment implements TunaNetraView {
     private ApiInterface mApiInterface;
     private RecyclerView mRecyclerView;
     private RequestAdapter mAdapter;
+    private List<RequestItems> requestItems;
+    private TunaNetraPresenter presenter;
+    private MediaPlayer mp;
+    private int currentPlayPosition;
 
 
     public TunaNetraFragment() {
@@ -49,6 +56,7 @@ public class TunaNetraFragment extends Fragment {
         mRecyclerView = v.findViewById(R.id.rv_request_tuna_netra);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
+
         ItemClickSupport.addTo(mRecyclerView).setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
             @Override
             public void onItemClicked(RecyclerView recyclerView, int position, View v) {
@@ -57,30 +65,73 @@ public class TunaNetraFragment extends Fragment {
             }
         });
 
-        mApiInterface = ApiClient.getClient().create(ApiInterface.class);
-        refresh();
+
+        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+        presenter = new TunaNetraPresenter(this, apiInterface);
+        presenter.getRequestList();
+
 
         return v;
     }
 
-    public void refresh() {
-        Call<RequestModel> requestModelCall = mApiInterface.getRequests();
-        requestModelCall.enqueue(new Callback<RequestModel>() {
-            @Override
-            public void onResponse(Call<RequestModel> call, Response<RequestModel> response) {
-                List<RequestItems> requestItemsList = response.body().getRequestItems();
-                Log.d("Retrofit Get", "Request Count: " + String.valueOf(requestItemsList.size()));
-                mAdapter = new RequestAdapter(requestItemsList, getContext());
-                mRecyclerView.setAdapter(mAdapter);
+    private void playMedia(String url){
+        if (mp == null){
+            mp = new MediaPlayer();
+        } else {
+            mp.reset();
+        }
+        mp.setAudioStreamType(AudioManager.STREAM_MUSIC);
+        AssetFileDescriptor afd = getContext().getResources().openRawResourceFd(R.raw.cek);
 
-            }
+        try {
+            mp.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-            @Override
-            public void onFailure(Call<RequestModel> call, Throwable t) {
-                Log.e("Retrofit Get", t.toString());
-            }
-        });
+        try {
+            mp.prepare();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        mp.start();
+    }
+
+    @Override
+    public void showLoading() {
 
     }
 
+    @Override
+    public void hideLoading() {
+
+    }
+
+    @Override
+    public void showRequestList(List<RequestItems> requestData) {
+        requestItems = requestData;
+
+        mAdapter = new RequestAdapter(requestItems, getContext(), new RequestAdapter.RequestAdapterClickListener() {
+            @Override
+            public void onClickListener(String audioUrl, int adapterPosition, boolean isPlaying) {
+                if (isPlaying){
+                    mp.pause();
+                } else {
+                    playMedia(audioUrl);
+                }
+            }
+        });
+        mRecyclerView.setAdapter(mAdapter);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (mp != null){
+            if (mp.isPlaying()){
+                mp.stop();
+            }
+            mp.release();
+        }
+    }
 }

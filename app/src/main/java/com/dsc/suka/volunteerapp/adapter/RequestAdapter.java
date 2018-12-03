@@ -2,6 +2,7 @@ package com.dsc.suka.volunteerapp.adapter;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,21 +14,23 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.dsc.suka.volunteerapp.R;
 import com.dsc.suka.volunteerapp.model.RequestItems;
+import com.dsc.suka.volunteerapp.util.DateTime;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.StringTokenizer;
 
-public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.ViewHolder>{
+public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.ViewHolder> {
     List<RequestItems> mRequestItemsList;
     private Context context;
+    private RequestAdapterClickListener mListener;
+    private int mCurrentPlayingPosition = -1;
 
-    public RequestAdapter(List<RequestItems> requestItemsList, Context context){
+    public RequestAdapter(List<RequestItems> requestItemsList, Context context, RequestAdapterClickListener listener) {
         mRequestItemsList = requestItemsList;
         this.context = context;
+        mListener = listener;
     }
 
     @NonNull
@@ -40,68 +43,25 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.tvRequesterName.setText(mRequestItemsList.get(position).getRequesterName());
-        holder.tvRequesterProdi.setText(mRequestItemsList.get(position).requsterProdi);
+        holder.bind(mRequestItemsList.get(position), position, mListener);
 
-        String fullDate = mRequestItemsList.get(position).getTime();
-        StringTokenizer tokenizer = new StringTokenizer(fullDate);
-
-        String date = tokenizer.nextToken();
-        String time = tokenizer.nextToken();
-
-        Calendar calendar = Calendar.getInstance();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        String today = sdf.format(calendar.getTime());
-
-        if (today.equalsIgnoreCase(date)){
-            SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm:ss");
-            Date format = null;
-
-            try {
-                format = timeFormat.parse(time);
-            } catch (ParseException e){
-                e.printStackTrace();
-            }
-
-            SimpleDateFormat newTimeFormat = new SimpleDateFormat("hh:mm a");
-            String newTime = newTimeFormat.format(format);
-
-            holder.tvRequestTime.setText(newTime);
-
-        } else {
-            Date format = null;
-
-            try {
-                format = sdf.parse(date);
-            } catch (ParseException e){
-                e.printStackTrace();
-            }
-
-            SimpleDateFormat newFormat = new SimpleDateFormat("dd MMMM yyyy");
-            String newDate = newFormat.format(format);
-
-            holder.tvRequestTime.setText(newDate);
-        }
-
-        String photoUrl = mRequestItemsList.get(position).getRequesterPhoto();
-
-        RequestOptions options = new RequestOptions()
-                .centerCrop();
-
-        Glide.with(context)
-                .load(photoUrl)
-                .apply(options)
-                .into(holder.imgRequesterPhoto);
     }
 
     @Override
     public int getItemCount() {
-        return mRequestItemsList.size();
+        if (mRequestItemsList != null) {
+            return mRequestItemsList.size();
+        } else {
+            return 0;
+        }
     }
+
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public TextView tvRequesterName, tvRequesterProdi, tvRequestTime;
         public ImageView imgRequesterPhoto;
+        public FloatingActionButton fabPlay;
+        boolean isPlaying = false;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -109,6 +69,79 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.ViewHold
             tvRequesterProdi = itemView.findViewById(R.id.tv_requester_prodi);
             tvRequestTime = itemView.findViewById(R.id.tv_request_time);
             imgRequesterPhoto = itemView.findViewById(R.id.img_requester_photo);
+            fabPlay = itemView.findViewById(R.id.fab_play_request_item);
+        }
+
+        public void bind(final RequestItems requestItems,final int position, final RequestAdapterClickListener listener) {
+            if (mCurrentPlayingPosition == position){
+                fabPlay.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_pause_blue_24dp));
+            } else {
+                fabPlay.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_play_arrow_red_24dp));
+                isPlaying = false;
+            }
+            tvRequesterName.setText(requestItems.requesterName);
+            tvRequesterProdi.setText(requestItems.requsterProdi);
+
+            String fullDate = requestItems.getTime();
+            StringTokenizer tokenizer = new StringTokenizer(fullDate);
+
+            String date = tokenizer.nextToken();
+            String time = tokenizer.nextToken();
+
+            Calendar calendar = Calendar.getInstance();
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            String today = sdf.format(calendar.getTime());
+
+            if (today.equalsIgnoreCase(date)) {
+                String newTime = DateTime.dateTimeParser(time, "hh:mm:ss", "hh:mm:ss");
+                tvRequestTime.setText(newTime);
+
+            } else {
+                String newDate = DateTime.dateTimeParser(date, "yyyy-MM-dd", "dd MMMM yyyy");
+                tvRequestTime.setText(newDate);
+            }
+
+            String photoUrl = requestItems.requesterPhoto;
+
+            RequestOptions options = new RequestOptions()
+                    .centerCrop();
+
+            Glide.with(itemView.getContext())
+                    .load(photoUrl)
+                    .apply(options)
+                    .into(imgRequesterPhoto);
+
+            final String audioURl = "";
+
+            fabPlay.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int previousPosition = mCurrentPlayingPosition;
+
+                    if (isPlaying) {
+                        mCurrentPlayingPosition = -1;
+
+                        listener.onClickListener(audioURl, getAdapterPosition(), isPlaying);
+                        fabPlay.setImageDrawable(itemView.getContext().getResources().getDrawable(R.drawable.ic_play_arrow_red_24dp));
+                        isPlaying = false;
+                    } else {
+                        mCurrentPlayingPosition = getAdapterPosition();
+
+                        listener.onClickListener(audioURl, getAdapterPosition(), isPlaying);
+                        fabPlay.setImageDrawable(itemView.getContext().getResources().getDrawable(R.drawable.ic_pause_blue_24dp));
+                        isPlaying = true;
+                    }
+
+                    if (previousPosition != -1){
+                        notifyItemChanged(previousPosition);
+                    }
+                }
+            });
         }
     }
+
+    public interface RequestAdapterClickListener{
+        void onClickListener(String audioUrl, int adapterPosition, boolean isPlaying);
+    }
+
 }

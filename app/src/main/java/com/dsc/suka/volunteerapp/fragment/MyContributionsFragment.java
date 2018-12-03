@@ -1,6 +1,7 @@
 package com.dsc.suka.volunteerapp.fragment;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,11 +12,21 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.dsc.suka.volunteerapp.R;
+import com.dsc.suka.volunteerapp.activity.MyContributionExtendedActivity;
 import com.dsc.suka.volunteerapp.adapter.MyContributionAdapter;
+
 import com.dsc.suka.volunteerapp.model.RequestItems;
 import com.dsc.suka.volunteerapp.model.RequestModel;
+import com.dsc.suka.volunteerapp.model.ContributionItems;
+import com.dsc.suka.volunteerapp.model.ContributionModel;
+
 import com.dsc.suka.volunteerapp.service.ApiClient;
 import com.dsc.suka.volunteerapp.service.ApiInterface;
+
+import com.dsc.suka.volunteerapp.presenter.ContributionPresenter;
+import com.dsc.suka.volunteerapp.util.ItemClickSupport;
+import com.dsc.suka.volunteerapp.view.ContributionView;
+
 
 import java.util.List;
 
@@ -26,11 +37,20 @@ import retrofit2.Response;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class MyContributionsFragment extends Fragment {
+public class MyContributionsFragment extends Fragment implements ContributionView {
     ApiInterface mApiInterface;
     private RecyclerView mRecyclerView;
     private MyContributionAdapter mAdapter;
+    private List<ContributionItems> mContributionItemsList;
+    private ContributionPresenter presenter;
 
+    public List<ContributionItems> getmContributionItemsList() {
+        return mContributionItemsList;
+    }
+
+    public void setmContributionItemsList(List<ContributionItems> mContributionItemsList) {
+        this.mContributionItemsList = mContributionItemsList;
+    }
 
     public MyContributionsFragment() {
         // Required empty public constructor
@@ -46,29 +66,36 @@ public class MyContributionsFragment extends Fragment {
         mRecyclerView = view.findViewById(R.id.rv_my_contribution);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
+        ItemClickSupport.addTo(mRecyclerView).setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
+            @Override
+            public void onItemClicked(RecyclerView recyclerView, int position, View v) {
+                Intent intent = new Intent(getContext(), MyContributionExtendedActivity.class);
+                intent.putExtra(MyContributionExtendedActivity.EXTRA_CONTRIBUTION, getmContributionItemsList().get(position));
+                startActivity(intent);
+            }
+        });
+
         mApiInterface = ApiClient.getClient().create(ApiInterface.class);
-        refresh();
+        presenter = new ContributionPresenter(this, mApiInterface);
+        presenter.getMyContributionList();
 
         return view;
     }
 
-    private void refresh() {
-        Call<RequestModel> requestModelCall = mApiInterface.getContribution();
-        requestModelCall.enqueue(new Callback<RequestModel>() {
-            @Override
-            public void onResponse(Call<RequestModel> call, Response<RequestModel> response) {
-                List<RequestItems> requestItemsList = response.body().getRequestItems();
-                Log.d("Retrofit Get", "Request Count: " + String.valueOf(requestItemsList.size()));
-                mAdapter = new MyContributionAdapter(requestItemsList, getContext());
-                mRecyclerView.setAdapter(mAdapter);
-            }
+    @Override
+    public void showLoading() {
 
-            @Override
-            public void onFailure(Call<RequestModel> call, Throwable t) {
-                Log.e("Retrofit Get", t.toString());
-
-            }
-        });
     }
 
+    @Override
+    public void hideLoading() {
+
+    }
+
+    @Override
+    public void showContributionList(List<ContributionItems> contributionData) {
+        setmContributionItemsList(contributionData);
+        mAdapter = new MyContributionAdapter(mContributionItemsList, getContext());
+        mRecyclerView.setAdapter(mAdapter);
+    }
 }
