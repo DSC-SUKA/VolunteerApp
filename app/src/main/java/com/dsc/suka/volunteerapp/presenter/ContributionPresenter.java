@@ -29,7 +29,7 @@ public class ContributionPresenter {
             @Override
             public void onResponse(Call<ContributionModel> call, Response<ContributionModel> response) {
                 List<ContributionItems> contributionItemsList = response.body().getmContributionItems();
-                Log.d("Retrofit Get", "Request Count: " + String.valueOf(contributionItemsList.size()));
+                Log.d("Retrofit Get", "Request Count: " + response.toString());
                 mView.hideLoading();
                 mView.showContributionList(contributionItemsList);
             }

@@ -9,10 +9,14 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.dsc.suka.volunteerapp.network.ApiInterface;
+import com.dsc.suka.volunteerapp.newModel.RequestModelAll;
+import com.dsc.suka.volunteerapp.newModel.RequestModelData;
 import com.dsc.suka.volunteerapp.presenter.TunaNetraPresenter;
 import com.dsc.suka.volunteerapp.view.TunaNetraView;
 import com.dsc.suka.volunteerapp.util.ItemClickSupport;
@@ -21,9 +25,9 @@ import com.dsc.suka.volunteerapp.adapter.RequestAdapter;
 import com.dsc.suka.volunteerapp.activity.TunaNetraRecordActivity;
 import com.dsc.suka.volunteerapp.model.RequestItems;
 
-import com.dsc.suka.volunteerapp.model.RequestModel;
-import com.dsc.suka.volunteerapp.service.ApiClient;
-import com.dsc.suka.volunteerapp.service.ApiInterface;
+import com.dsc.suka.volunteerapp.service.ApiClientService;
+import com.dsc.suka.volunteerapp.service.ApiInterfaceService;
+import com.google.firebase.storage.FirebaseStorage;
 
 
 import java.io.IOException;
@@ -33,13 +37,15 @@ import java.util.List;
  * A simple {@link Fragment} subclass.
  */
 public class TunaNetraFragment extends Fragment implements TunaNetraView {
-    private ApiInterface mApiInterface;
+    private ApiInterfaceService apiInterfaceService;
     private RecyclerView mRecyclerView;
     private RequestAdapter mAdapter;
-    private List<RequestItems> requestItems;
+    private List<RequestModelData> requestItems;
     private TunaNetraPresenter presenter;
     private MediaPlayer mp;
     private int currentPlayPosition;
+    FirebaseStorage storage;
+
 
 
     public TunaNetraFragment() {
@@ -56,6 +62,7 @@ public class TunaNetraFragment extends Fragment implements TunaNetraView {
         mRecyclerView = v.findViewById(R.id.rv_request_tuna_netra);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
+//        storage = FirebaseStorage.getInstance();
 
         ItemClickSupport.addTo(mRecyclerView).setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
             @Override
@@ -66,8 +73,8 @@ public class TunaNetraFragment extends Fragment implements TunaNetraView {
         });
 
 
-        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-        presenter = new TunaNetraPresenter(this, apiInterface);
+        apiInterfaceService = ApiClientService.getClient().create(ApiInterfaceService.class);
+        presenter = new TunaNetraPresenter(this, apiInterfaceService);
         presenter.getRequestList();
 
 
@@ -82,9 +89,10 @@ public class TunaNetraFragment extends Fragment implements TunaNetraView {
         }
         mp.setAudioStreamType(AudioManager.STREAM_MUSIC);
         AssetFileDescriptor afd = getContext().getResources().openRawResourceFd(R.raw.cek);
+//        String downloadUrl = storage.getReferenceFromUrl(url).toString();
 
         try {
-            mp.setDataSource(afd.getFileDescriptor(), afd.getStartOffset(), afd.getLength());
+            mp.setDataSource(url);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -108,12 +116,13 @@ public class TunaNetraFragment extends Fragment implements TunaNetraView {
     }
 
     @Override
-    public void showRequestList(List<RequestItems> requestData) {
+    public void showRequestList(List<RequestModelData> requestData) {
         requestItems = requestData;
 
         mAdapter = new RequestAdapter(requestItems, getContext(), new RequestAdapter.RequestAdapterClickListener() {
             @Override
             public void onClickListener(String audioUrl, int adapterPosition, boolean isPlaying) {
+                Log.d("audio", audioUrl);
                 if (isPlaying){
                     mp.pause();
                 } else {

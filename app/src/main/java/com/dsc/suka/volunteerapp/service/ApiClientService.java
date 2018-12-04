@@ -3,7 +3,7 @@ package com.dsc.suka.volunteerapp.service;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class ApiClient {
+public class ApiClientService {
 
     public static final String BASE_URL = "https://demo4098679.mockable.io/";
 
@@ -15,7 +15,7 @@ public class ApiClient {
     public static Retrofit getClient(){
         if (retrofit == null){
             retrofit = new Retrofit.Builder()
-                    .baseUrl(BASE_URL)
+                    .baseUrl(base_url)
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
         }
