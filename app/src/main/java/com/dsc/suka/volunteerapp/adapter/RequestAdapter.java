@@ -14,6 +14,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.dsc.suka.volunteerapp.R;
 import com.dsc.suka.volunteerapp.model.RequestItems;
+import com.dsc.suka.volunteerapp.newModel.RequestModelData;
 import com.dsc.suka.volunteerapp.util.DateTime;
 
 import java.text.SimpleDateFormat;
@@ -22,12 +23,12 @@ import java.util.List;
 import java.util.StringTokenizer;
 
 public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.ViewHolder> {
-    List<RequestItems> mRequestItemsList;
+    List<RequestModelData> mRequestItemsList;
     private Context context;
     private RequestAdapterClickListener mListener;
     private int mCurrentPlayingPosition = -1;
 
-    public RequestAdapter(List<RequestItems> requestItemsList, Context context, RequestAdapterClickListener listener) {
+    public RequestAdapter(List<RequestModelData> requestItemsList, Context context, RequestAdapterClickListener listener) {
         mRequestItemsList = requestItemsList;
         this.context = context;
         mListener = listener;
@@ -72,36 +73,36 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.ViewHold
             fabPlay = itemView.findViewById(R.id.fab_play_request_item);
         }
 
-        public void bind(final RequestItems requestItems,final int position, final RequestAdapterClickListener listener) {
+        public void bind(final RequestModelData requestItems,final int position, final RequestAdapterClickListener listener) {
             if (mCurrentPlayingPosition == position){
                 fabPlay.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_pause_blue_24dp));
             } else {
                 fabPlay.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_play_arrow_red_24dp));
                 isPlaying = false;
             }
-            tvRequesterName.setText(requestItems.requesterName);
-            tvRequesterProdi.setText(requestItems.requsterProdi);
+            tvRequesterName.setText(requestItems.userName);
+            tvRequesterProdi.setText("");
 
-            String fullDate = requestItems.getTime();
-            StringTokenizer tokenizer = new StringTokenizer(fullDate);
+//            String fullDate = requestItems.getTime();
+//            StringTokenizer tokenizer = new StringTokenizer(fullDate);
 
-            String date = tokenizer.nextToken();
-            String time = tokenizer.nextToken();
+//            String date = tokenizer.nextToken();
+//            String time = tokenizer.nextToken();
 
             Calendar calendar = Calendar.getInstance();
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             String today = sdf.format(calendar.getTime());
 
-            if (today.equalsIgnoreCase(date)) {
-                String newTime = DateTime.dateTimeParser(time, "hh:mm:ss", "hh:mm:ss");
-                tvRequestTime.setText(newTime);
+//            if (today.equalsIgnoreCase(date)) {
+//                String newTime = DateTime.dateTimeParser(time, "hh:mm:ss", "hh:mm:ss");
+//                tvRequestTime.setText(newTime);
+//
+//            } else {
+//                String newDate = DateTime.dateTimeParser(date, "yyyy-MM-dd", "dd MMMM yyyy");
+//                tvRequestTime.setText(newDate);
+//            }
 
-            } else {
-                String newDate = DateTime.dateTimeParser(date, "yyyy-MM-dd", "dd MMMM yyyy");
-                tvRequestTime.setText(newDate);
-            }
-
-            String photoUrl = requestItems.requesterPhoto;
+            String photoUrl = requestItems.avatarURL;
 
             RequestOptions options = new RequestOptions()
                     .centerCrop();
@@ -111,7 +112,7 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.ViewHold
                     .apply(options)
                     .into(imgRequesterPhoto);
 
-            final String audioURl = "";
+            final String audioURl = requestItems.getAudioUrl();
 
             fabPlay.setOnClickListener(new View.OnClickListener() {
                 @Override
