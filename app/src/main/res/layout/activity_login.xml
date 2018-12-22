@@ -9,16 +9,18 @@
     android:paddingLeft="@dimen/space"
     android:paddingRight="@dimen/space"
     tools:context=".loginActivities.LoginActivity">
+
     <ImageView
         android:id="@+id/img_logo"
         android:layout_width="150dp"
         android:layout_height="150dp"
         android:src="@drawable/logo"
         android:layout_gravity="center"
+        android:layout_marginBottom="@dimen/space"
         android:contentDescription="@string/app_icon" />
 
     <android.support.design.widget.TextInputLayout
-        android:id="@+id/inputText_nim"
+        android:id="@+id/inputEmail_login"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/space">
@@ -34,7 +36,7 @@
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
-        android:id="@+id/inputText_password"
+        android:id="@+id/inputPass_login"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -58,7 +60,7 @@
         android:textColor="@android:color/white"/>
 
     <Button
-        android:id="@+id/btn_forgotPassword"
+        android:id="@+id/btnResetPass_login"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@null"
@@ -68,7 +70,7 @@
         android:layout_marginBottom="@dimen/space"/>
 
     <Button
-        android:id="@+id/btn_register"
+        android:id="@+id/btnRegister_login"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/not_a_member_register_now"

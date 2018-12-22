@@ -13,17 +13,14 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.dsc.suka.volunteerapp.R;
-import com.dsc.suka.volunteerapp.model.RequestItems;
 import com.dsc.suka.volunteerapp.newModel.RequestModelData;
-import com.dsc.suka.volunteerapp.util.DateTime;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
-import java.util.StringTokenizer;
 
 public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.ViewHolder> {
-    List<RequestModelData> mRequestItemsList;
+    private List<RequestModelData> mRequestItemsList;
     private Context context;
     private RequestAdapterClickListener mListener;
     private int mCurrentPlayingPosition = -1;
@@ -38,8 +35,7 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.ViewHold
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.tuna_netra_request_item, parent, false);
-        ViewHolder viewHolder = new ViewHolder(view);
-        return viewHolder;
+        return new ViewHolder(view);
     }
 
     @Override
@@ -58,13 +54,13 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.ViewHold
     }
 
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView tvRequesterName, tvRequesterProdi, tvRequestTime;
-        public ImageView imgRequesterPhoto;
-        public FloatingActionButton fabPlay;
+    class ViewHolder extends RecyclerView.ViewHolder {
+        TextView tvRequesterName, tvRequesterProdi, tvRequestTime;
+        ImageView imgRequesterPhoto;
+        FloatingActionButton fabPlay;
         boolean isPlaying = false;
 
-        public ViewHolder(View itemView) {
+        ViewHolder(View itemView) {
             super(itemView);
             tvRequesterName = itemView.findViewById(R.id.tv_requester_name);
             tvRequesterProdi = itemView.findViewById(R.id.tv_requester_prodi);
@@ -73,7 +69,7 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.ViewHold
             fabPlay = itemView.findViewById(R.id.fab_play_request_item);
         }
 
-        public void bind(final RequestModelData requestItems,final int position, final RequestAdapterClickListener listener) {
+        void bind(final RequestModelData requestItems, final int position, final RequestAdapterClickListener listener) {
             if (mCurrentPlayingPosition == position){
                 fabPlay.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_pause_blue_24dp));
             } else {
