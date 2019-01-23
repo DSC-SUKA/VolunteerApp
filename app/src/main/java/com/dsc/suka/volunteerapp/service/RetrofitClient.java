@@ -5,20 +5,28 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ApiClientService {
 
-    public static final String BASE_URL = "https://demo4098679.mockable.io/";
+//    private static ApiInterfaceService service;
 
-    //tesya
-    public static final String base_url = "https://suka-care-dev.appspot.com/";
+//    public static final String BASE_URL = "https://demo4098679.mockable.io/";
 
-    public static Retrofit retrofit = null;
+    private static final String base_url =
 
-    public static Retrofit getClient(){
+    private static Retrofit retrofit = null;
+
+    public static Retrofit getClient(String base_url){
         if (retrofit == null){
             retrofit = new Retrofit.Builder()
                     .baseUrl(base_url)
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
+
+            service = retrofit.create(ApiInterfaceService.class);
         }
         return  retrofit;
+    }
+
+
+    public static ApiClientService getUserService() {
+        return
     }
 }
