@@ -21,7 +21,7 @@ import android.widget.Toast;
 
 import com.dsc.suka.volunteerapp.R;
 import com.dsc.suka.volunteerapp.fragment.TunaNetraAlertDiscardDialog;
-import com.dsc.suka.volunteerapp.util.PermissionManager;
+import com.dsc.suka.volunteerapp.utils.PermissionManager;
 
 import java.io.IOException;
 
@@ -70,20 +70,18 @@ public class TunaNetraRecordActivity extends AppCompatActivity implements View.O
             @Override
             public void onClick(View v) {
                 if (PermissionManager.hasPermissions(getApplicationContext(), permissionNeeded)) {
-                    if (isRecorded == false) {
-                        if (isRecording == false) {
+                    if (!isRecorded) {
+                        if (!isRecording) {
                             setRecorder();
                             try {
                                 myAudioRecorder.prepare();
                                 myAudioRecorder.start();
                                 startHTime = SystemClock.uptimeMillis();
                                 handler.postDelayed(updateTimer, 0);
-                            } catch (IllegalStateException ise) {
-                                ise.printStackTrace();
-                            } catch (IOException e) {
-                                e.printStackTrace();
                             }
-
+                            catch (IllegalStateException | IOException ise) {
+                                ise.printStackTrace();
+                            }
                             setStopButton();
                             isRecording = true;
                         } else {

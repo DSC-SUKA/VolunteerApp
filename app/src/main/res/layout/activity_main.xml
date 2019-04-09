@@ -23,6 +23,7 @@
         app:menu="@menu/activity_main_drawer">
 
         <Button
+            android:id="@+id/btn_logout"
             style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -33,6 +34,5 @@
             android:textColor="@android:color/white" />
 
     </android.support.design.widget.NavigationView>
-
 
 </android.support.v4.widget.DrawerLayout>

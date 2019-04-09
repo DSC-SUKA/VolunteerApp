@@ -2,9 +2,23 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.dsc.suka.volunteerapp">
 
+    <uses-feature
+        android:name="android.hardware.camera2"
+        android:required="false"/>
+
+    <uses-feature
+        android:name="android.hardware.camera2.autofocus"
+        android:required="false"/>
+
+    <uses-feature
+        android:name="android.hardware.camera2.flash"
+        android:required="false"/>
+
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <application
         android:allowBackup="true"
@@ -14,38 +28,35 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
         <activity
-            android:name=".activity.MainActivity"
+            android:name=".ui.dashboard.MainActivity"
             android:label="@string/app_name"
             android:launchMode="singleTop"
-            android:theme="@style/AppTheme.NoActionBar">
-
-        </activity>
-
-
-        <activity android:name=".loginActivities.LoginActivity" >
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity android:name=".ui.authentication.login.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".loginActivities.SignUpActivity" />
-        <activity android:name=".loginActivities.ResetPasswordActivity" />
+        <activity android:name=".ui.authentication.register.SignupActivity" />
+        <activity android:name=".ui.authentication.resetpassword.ResetPasswordActivity" />
 
-        <!--<activity android:name=".LatestContributionExtendedActivity"-->
-            <!--android:parentActivityName=".activity.MainActivity">-->
+        <!-- <activity android:name=".LatestContributionExtendedActivity" -->
+        <!-- android:parentActivityName=".activity.MainActivity"> -->
 
-            <!--<meta-data-->
-                <!--android:name="android.support.PARENT_ACTIVITY"-->
-                <!--android:value=".activity.MainActivity" />-->
-        <!--</activity>-->
+
+        <!-- <meta-data -->
+        <!-- android:name="android.support.PARENT_ACTIVITY" -->
+        <!-- android:value=".activity.MainActivity" /> -->
+        <!-- </activity> -->
 
         <activity
             android:name=".activity.TunaNetraRecordActivity"
-            android:parentActivityName=".activity.MainActivity">
+            android:parentActivityName=".ui.dashboard.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".activity.MainActivity" />
+                android:value=".ui.dashboard.MainActivity" />
         </activity>
         <activity
             android:name=".activity.TunaNetraSendActivity"
@@ -54,7 +65,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activity.TunaNetraRecordActivity" />
         </activity>
-
+        <!--<activity android:name=".activity.TunaNetraActivity"></activity>-->
     </application>
 
 </manifest>

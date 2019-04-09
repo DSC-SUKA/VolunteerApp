@@ -13,14 +13,15 @@ import android.widget.TextView;
 
 import com.dsc.suka.volunteerapp.R;
 import com.dsc.suka.volunteerapp.model.ContributionItems;
-import com.dsc.suka.volunteerapp.util.DateTime;
-import com.dsc.suka.volunteerapp.util.MediaUtil;
+import com.dsc.suka.volunteerapp.model.ResponseAudioSingle;
+import com.dsc.suka.volunteerapp.utils.DateTime;
+import com.dsc.suka.volunteerapp.utils.MediaUtil;
 
 import java.io.IOException;
 import java.util.StringTokenizer;
 
 public class MyContributionExtendedActivity extends AppCompatActivity implements View.OnClickListener, MediaPlayer.OnCompletionListener {
-    private ContributionItems contributionItems;
+    private ResponseAudioSingle contributionItems;
     private TextView tvName, tvProdi, tvTime, tvAudioStart, tvAudioEnd;
     public static String EXTRA_CONTRIBUTION = "contribution_extras";
     private ImageButton btnPlay, btnStop, btnRestart;
@@ -52,16 +53,16 @@ public class MyContributionExtendedActivity extends AppCompatActivity implements
 
         contributionItems = getIntent().getParcelableExtra(EXTRA_CONTRIBUTION);
 
-        tvName.setText(contributionItems.getRequesterName());
-        tvProdi.setText(contributionItems.getRequsterProdi());
+        tvName.setText(contributionItems.getUser_dif_name());
+//        tvProdi.setText(contributionItems.getRequsterProdi());
 
-        String fullDate = contributionItems.getTime();
-        StringTokenizer tokenizer = new StringTokenizer(fullDate);
-
-        String date = tokenizer.nextToken();
-        String newDate = DateTime.dateTimeParser(date, "yyyy-MM-dd", "dd / MM / yyyy");
-
-        tvTime.setText(newDate);
+//        String fullDate = contributionItems.getTime();
+//        StringTokenizer tokenizer = new StringTokenizer(?fullDate);
+//
+//        String date = tokenizer.nextToken();
+//        String newDate = DateTime.dateTimeParser(date, "yyyy-MM-dd", "dd / MM / yyyy");
+//
+//        tvTime.setText(newDate);
 
         seekBarProgrress = findViewById(R.id.seekbar_contribution);
         seekBarProgrress.setPadding(0, 0, 0, 0);

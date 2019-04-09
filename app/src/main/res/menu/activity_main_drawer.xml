@@ -7,19 +7,19 @@
         <item
             android:id="@+id/nav_home"
             android:icon="@drawable/ic_home_black_24dp"
-            android:title="Home" />
+            android:title="@string/home" />
         <item
             android:id="@+id/nav_tuna_netra"
             android:icon="@drawable/ic_visibility_off_black_24dp"
-            android:title="Tuna Netra" />
+            android:title="@string/tuna_netra" />
         <item
             android:id="@+id/nav_tuna_rungu"
             android:icon="@drawable/ic_hearing_black_24dp"
-            android:title="Tuna Rungu" />
+            android:title="@string/tuna_rungu" />
         <item
             android:id="@+id/nav_my_contributions"
             android:icon="@drawable/ic_person_black_24dp"
-            android:title="My Contributions" />
+            android:title="@string/kontribusi_saya" />
     </group>
 
 </menu>

@@ -1,9 +1,8 @@
 package com.dsc.suka.volunteerapp.activity;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
-import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.AdapterView;
@@ -55,7 +54,6 @@ public class TunaNetraSendActivity extends AppCompatActivity implements View.OnC
         btnSubmit = findViewById(R.id.btn_submit);
         btnSubmit.setOnClickListener(this);
         btnSubmit.setEnabled(false);
-
 
     }
 
