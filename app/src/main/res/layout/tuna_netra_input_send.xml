@@ -22,22 +22,22 @@
             android:layout_height="wrap_content"
             android:background="@drawable/editext_background"
             android:hint="@string/title"
-            android:layout_marginBottom="@dimen/activity_vertical_margin"
-            />
+            android:layout_marginBottom="@dimen/activity_vertical_margin" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/select_category"
+            android:text="@string/category"
             android:textSize="16sp"
             android:layout_marginBottom="@dimen/activity_vertical_margin"/>
 
-        <Spinner
-            android:id="@+id/spinner_category"
+        <EditText
+            android:id="@+id/edt_category"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/editext_background"
-            android:spinnerMode="dropdown"/>
+            android:hint="@string/title"
+            android:layout_marginBottom="@dimen/activity_vertical_margin" />
     </LinearLayout>
 
     <Button

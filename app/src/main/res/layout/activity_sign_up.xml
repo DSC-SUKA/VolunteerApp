@@ -1,60 +1,151 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_signUp"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:layout_gravity="center"
     android:orientation="vertical"
-    android:gravity="center"
-    android:paddingLeft="@dimen/space"
-    android:paddingRight="@dimen/space"
-    tools:context=".loginActivities.SignUpActivity">
-    <ImageView
-        android:id="@+id/img_logo"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:src="@android:drawable/ic_menu_compass"
-        android:layout_marginBottom="@dimen/space"
-        android:layout_gravity="center" />
+    tools:context=".ui.authentication.register.SignupActivity">
 
-    <android.support.design.widget.TextInputLayout
-        android:id="@+id/inputText_email"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/space">
-
-        <android.support.design.widget.TextInputEditText
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/email"
-            android:inputType="textEmailAddress"
-            android:drawableEnd="@drawable/ic_email_grey_24dp"
-            android:drawableRight="@drawable/ic_email_grey_24dp"/>
-
-    </android.support.design.widget.TextInputLayout>
-
-    <android.support.design.widget.TextInputLayout
-        android:id="@+id/inputText_password"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <android.support.design.widget.TextInputEditText
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/progressbar_signup"
+            android:layout_centerInParent="true"/>
+
+        <LinearLayout
+            android:paddingTop="@dimen/space"
+            android:paddingLeft="@dimen/space"
+            android:paddingRight="@dimen/space"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/password"
-            android:inputType="textPassword"
-            android:drawableEnd="@drawable/ic_email_grey_24dp"
-            android:drawableRight="@drawable/ic_email_grey_24dp"/>
+            android:orientation="vertical">
 
-    </android.support.design.widget.TextInputLayout>
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/civ_ava"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_gravity="center"
+                android:layout_margin="@dimen/activity_vertical_margin" />
 
-    <Button
-        android:id="@+id/btnSignUp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/space"
-        android:background="@drawable/round_button"
-        android:text="@string/signup"
-        android:textColor="@android:color/white"/>
+            <Button
+                android:id="@+id/btnChoosePict_SignUp"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="@dimen/little_space"
+                android:background="@drawable/login_button_bg"
+                android:text="@string/choose_picture"
+                android:textColor="@android:color/white" />
 
-</LinearLayout>
+            <Button
+                android:id="@+id/btnUploadPict_Signup"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="@dimen/little_space"
+                android:background="@drawable/login_button_bg"
+                android:text="@string/upload_picture"
+                android:textColor="@android:color/white" />
+
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/inputName_SignUp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space">
+
+                <android.support.design.widget.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableEnd="@drawable/ic_person_outline_24dp"
+                    android:hint="@string/name"
+                    android:inputType="text" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/inputEmail_SignUp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <android.support.design.widget.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableEnd="@drawable/ic_email_grey_24dp"
+                    android:hint="@string/email"
+                    android:inputType="textEmailAddress" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/inputPass_SignUp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <android.support.design.widget.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableEnd="@drawable/ic_lock_grey_24dp"
+                    android:hint="@string/password"
+                    android:inputType="textPassword" />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/inputPhone_SignUp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <android.support.design.widget.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:drawableEnd="@drawable/ic_phone_24dp"
+                    android:hint="@string/phone_number"
+                    android:inputType="phone" />
+            </android.support.design.widget.TextInputLayout>
+
+            <!--<RadioGroup-->
+            <!--android:id="@+id/rdg_role"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:orientation="vertical">-->
+
+            <!--<RadioButton-->
+            <!--android:id="@+id/rdb_volunteer"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="@string/volunteer"-->
+            <!--android:checked="true"-->
+            <!--android:onClick="onRadioButtonClicked"/>-->
+
+            <!--<RadioButton-->
+            <!--android:id="@+id/rdb_difable"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="@string/difable"-->
+            <!--android:onClick="onRadioButtonClicked"/>-->
+
+            <!--</RadioGroup>-->
+
+            <Button
+                android:id="@+id/btnSignUp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space"
+                android:layout_marginBottom="@dimen/space"
+                android:background="@drawable/login_button_bg"
+                android:text="@string/signup"
+                android:textColor="@android:color/white" />
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</ScrollView>

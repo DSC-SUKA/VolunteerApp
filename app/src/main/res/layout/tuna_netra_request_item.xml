@@ -13,9 +13,8 @@
     android:layout_gravity="center"
     android:background="@drawable/curve_corner_bg">
 
-
     <de.hdodenhof.circleimageview.CircleImageView
-        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:src="@mipmap/ic_launcher_round"
@@ -23,14 +22,13 @@
         android:layout_centerVertical="true"/>
 
     <LinearLayout
-        android:layout_toRightOf="@id/img_requester_photo"
+        android:layout_toEndOf="@id/img_requester_photo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_centerVertical="true"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        >
+        android:layout_marginStart="8dp">
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -38,18 +36,21 @@
             android:textColor="@android:color/black"
             android:textSize="20sp"
             android:id="@+id/tv_requester_name"/>
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            tools:text="Pendidikan Kimia"
-            android:textColor="@android:color/black"
-            android:id="@+id/tv_requester_prodi"/>
-        <TextView
-            android:layout_marginTop="16dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            tools:text="08:39 AM"
-            android:id="@+id/tv_request_time"/>
+
+        <!--<TextView-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--tools:text="Pendidikan Kimia"-->
+            <!--android:textColor="@android:color/black"-->
+            <!--android:id="@+id/tv_requester_prodi"/>-->
+
+        <!--<TextView-->
+            <!--android:layout_marginTop="16dp"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--tools:text="08:39 AM"-->
+            <!--android:id="@+id/tv_request_time"/>-->
+
     </LinearLayout>
 
     <android.support.design.widget.FloatingActionButton
@@ -61,11 +62,10 @@
         app:fabSize="mini"
         app:borderWidth="0dp"
         android:backgroundTint="@android:color/white"
-        android:layout_marginRight="@dimen/activity_horizontal_margin"
         android:layout_marginBottom="@dimen/activity_vertical_margin"
-        android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
         android:layout_marginEnd="@dimen/activity_horizontal_margin"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:focusable="true" />
 
 </RelativeLayout>

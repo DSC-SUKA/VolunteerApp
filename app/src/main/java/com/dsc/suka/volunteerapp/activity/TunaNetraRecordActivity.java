@@ -1,6 +1,7 @@
 package com.dsc.suka.volunteerapp.activity;
 
 import android.Manifest;
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.media.AudioManager;
@@ -14,19 +15,22 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dsc.suka.volunteerapp.R;
 import com.dsc.suka.volunteerapp.fragment.TunaNetraAlertDiscardDialog;
-import com.dsc.suka.volunteerapp.util.PermissionManager;
+import com.dsc.suka.volunteerapp.ui.dashboard.MainActivity;
+import com.dsc.suka.volunteerapp.ui.sendresponse.TunaNetraSendActivity;
+import com.dsc.suka.volunteerapp.utils.PermissionManager;
 
 import java.io.IOException;
 
 public class TunaNetraRecordActivity extends AppCompatActivity implements View.OnClickListener {
-    private static final String EXTRA_REQUEST_ID = "request_id_extras";
     private Button btnSend, btnDiscard;
     private ImageButton btnRecord;
     private boolean isRecording, isRecorded, isRecordPaused;
@@ -35,20 +39,19 @@ public class TunaNetraRecordActivity extends AppCompatActivity implements View.O
     private Handler handler = new Handler();
     long timeInMilis = 0L, timeSwapBuff = 0L, updatedTime = 0L;
     private MediaRecorder myAudioRecorder;
-    private String outputFile;
     private String[] permissionNeeded = {Manifest.permission.RECORD_AUDIO, Manifest.permission.WRITE_EXTERNAL_STORAGE};
     private final int REQUEST_CODE_RECORD_ACTIVITY = 111;
     private MediaPlayer mediaPlayer;
+    public static String EXTRA_REQUEST_DETAIL = "extra_request";
 
+    private String outputPath = Environment.getExternalStorageDirectory().getAbsolutePath() + "/response.3gp";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tuna_netra_record);
 
-        if (!PermissionManager.hasPermissions(this, permissionNeeded)) {
-            requestPermissions();
-        }
+        checkPermission();
 
         isRecorded = false;
         isRecordPaused = true;
@@ -70,20 +73,18 @@ public class TunaNetraRecordActivity extends AppCompatActivity implements View.O
             @Override
             public void onClick(View v) {
                 if (PermissionManager.hasPermissions(getApplicationContext(), permissionNeeded)) {
-                    if (isRecorded == false) {
-                        if (isRecording == false) {
+                    if (!isRecorded) {
+                        if (!isRecording) {
                             setRecorder();
                             try {
                                 myAudioRecorder.prepare();
                                 myAudioRecorder.start();
                                 startHTime = SystemClock.uptimeMillis();
                                 handler.postDelayed(updateTimer, 0);
-                            } catch (IllegalStateException ise) {
-                                ise.printStackTrace();
-                            } catch (IOException e) {
-                                e.printStackTrace();
                             }
-
+                            catch (IllegalStateException | IOException ise) {
+                                ise.printStackTrace();
+                            }
                             setStopButton();
                             isRecording = true;
                         } else {
@@ -102,12 +103,12 @@ public class TunaNetraRecordActivity extends AppCompatActivity implements View.O
                         }
                     } else {
                         if (isRecordPaused) {
-                            setAudioPlayer(outputFile);
+                            setAudioPlayer(outputPath);
                             mediaPlayer.start();
                             setStopButton();
                             isRecordPaused = false;
                         } else {
-                            stopAudioRecorded(mediaPlayer, outputFile);
+                            stopAudioRecorded(mediaPlayer, outputPath);
                             setPlayButton();
                             isRecordPaused = true;
                         }
@@ -119,6 +120,12 @@ public class TunaNetraRecordActivity extends AppCompatActivity implements View.O
             }
         });
 
+    }
+
+    private void checkPermission() {
+        if (!PermissionManager.hasPermissions(this, permissionNeeded)) {
+            requestPermissions();
+        }
     }
 
     private void requestPermissions() {
@@ -137,12 +144,11 @@ public class TunaNetraRecordActivity extends AppCompatActivity implements View.O
     }
 
     private void setRecorder() {
-        outputFile = Environment.getExternalStorageDirectory().getAbsolutePath() + "/recording.3gp";
         myAudioRecorder = new MediaRecorder();
         myAudioRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
         myAudioRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
         myAudioRecorder.setAudioEncoder(MediaRecorder.OutputFormat.AMR_NB);
-        myAudioRecorder.setOutputFile(outputFile);
+        myAudioRecorder.setOutputFile(outputPath);
     }
 
     private void stopAudioRecorded(MediaPlayer mediaPlayer, String outputFile) {
@@ -179,7 +185,6 @@ public class TunaNetraRecordActivity extends AppCompatActivity implements View.O
         });
     }
 
-
     private void setRecordButton() {
         btnRecord.setImageDrawable(getResources().getDrawable(R.mipmap.btn_record));
     }
@@ -196,24 +201,49 @@ public class TunaNetraRecordActivity extends AppCompatActivity implements View.O
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_discard_record:
-                TunaNetraAlertDiscardDialog alertDialog = new TunaNetraAlertDiscardDialog();
-                alertDialog.setOnOptionDialogListener(new TunaNetraAlertDiscardDialog.OnOptionDialogListener() {
-                    @Override
-                    public void onOptionChoosen(boolean optionsChoosen) {
-                        if (optionsChoosen) {
-                            resetRecord();
-                        }
-                    }
-                });
-                FragmentManager fragmentManager = getSupportFragmentManager();
-                alertDialog.show(fragmentManager, TunaNetraAlertDiscardDialog.class.getSimpleName());
+                showAlertDialog();
                 break;
             case R.id.btn_send_record:
                 Intent intent = new Intent(this, TunaNetraSendActivity.class);
-                intent.putExtra(TunaNetraSendActivity.EXTRA_REQUEST_ID_SUBMIT, getIntent().getIntExtra(EXTRA_REQUEST_ID, 0));
+                // PASSING REQUEST DATA
+                intent.putExtra(TunaNetraSendActivity.EXTRA_REQUEST_DETAIL, getIntent().getParcelableExtra(EXTRA_REQUEST_DETAIL));
+                // PASSING RECORDED AUDIO PATH
+                intent.putExtra(TunaNetraSendActivity.EXTRA_PATH_RECORD, outputPath);
                 startActivity(intent);
                 break;
         }
+    }
+
+    private void showAlertDialog() {
+        final Dialog dialog = new Dialog(this, android.R.style.Theme_Translucent_NoTitleBar_Fullscreen);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.dialog_discard_record);
+
+        RelativeLayout dimBackground = (RelativeLayout) dialog.findViewById(R.id.dim_background_discard_record);
+        dimBackground.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+
+        Button btnYes = (Button) dialog.findViewById(R.id.btn_discard_record_dialog_yes);
+        btnYes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+                resetRecord();
+            }
+        });
+
+        Button btnNo = (Button) dialog.findViewById(R.id.btn_discard_dialog_dialog_no);
+        btnNo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
     }
 
     private Runnable updateTimer = new Runnable() {

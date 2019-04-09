@@ -7,10 +7,19 @@
     <color name="newToolbar"></color>
     <color name="newAccent"></color>
     <color name="buttonDisabled">#F86B77</color>
-    
+
     <color name="colorRed">#ff5e63</color>
     <color name="colorDarkerRed">#d23035</color>
     <color name="colorBlue">#9dd1fb</color>
     <color name="buttonPositive">#27ae60</color>
     <color name="buttonPositiveDisabled">#9bdab6</color>
+
+    <color name="alertPositiveGreen">#09bb6e</color>
+    <color name="alertPositiveGreenPressed">#81C784</color>
+    <color name="alertNegativeRed">#ff3333</color>
+    <color name="alertNegativeRedPressed">#E57373</color>
+
+    <color name="warningColor">#F1C40F</color>
+
+    <color name="colorDim">#43000000</color>
 </resources>
