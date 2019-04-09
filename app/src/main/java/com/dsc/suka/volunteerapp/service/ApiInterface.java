@@ -64,7 +64,7 @@ public interface ApiInterface {
 
     @Multipart
     @POST("response/upload")
-    Call<RespUploadResponse> responseUpload(@Part MultipartBody.Part audio,
+    Call<RespUploadResponse> uploadResponse(@Part MultipartBody.Part audio,
                                             @Part ("audio_id") RequestBody audioReqId,
                                             @Part ("category") RequestBody category,
                                             @Part ("user_id") RequestBody user_id,

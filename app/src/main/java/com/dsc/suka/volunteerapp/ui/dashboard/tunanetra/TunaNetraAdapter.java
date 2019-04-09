@@ -23,6 +23,10 @@ public class TunaNetraAdapter extends RecyclerView.Adapter<TunaNetraAdapter.View
     private TunaNetraAdapterClickListener mListener;
     private int mCurrentPlayingPosition = -1;
 
+    public void setmCurrentPlayingPosition(int mCurrentPlayingPosition) {
+        this.mCurrentPlayingPosition = mCurrentPlayingPosition;
+    }
+
     public TunaNetraAdapter(List<ResponseRequestSingle> requestList, Context context, TunaNetraAdapterClickListener listener){
         mRequestList = requestList;
         mContext = context;
@@ -73,7 +77,7 @@ public class TunaNetraAdapter extends RecyclerView.Adapter<TunaNetraAdapter.View
 
             String nama = String.valueOf(requestItems.getUserName());
             String avatar_url = String.valueOf(requestItems.getAvatarURL());
-            final String audioURl = String.valueOf(requestItems.getAudioUrl());
+            final String audioURl = String.valueOf(requestItems.getAudioUrl() + "?alt=media&token=");
             tvRequesterName.setText(nama);
 
 //            String fullDate = requestItems.getTime();

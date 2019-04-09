@@ -34,6 +34,7 @@ public class TunaNetraFragment extends Fragment implements TunaNetraView {
     private TunaNetraAdapter mAdapter;
     private TunaNetraPresenter mPresenter;
     private MediaPlayer mediaPlayer;
+    private int currentAdapterPosition;
 
     public TunaNetraFragment() {
         // Required empty public constructor
@@ -62,6 +63,7 @@ public class TunaNetraFragment extends Fragment implements TunaNetraView {
             @Override
             public void onItemClicked(RecyclerView recyclerView, int position, View v) {
                 Intent intent = new Intent(getContext(), TunaNetraRecordActivity.class);
+                intent.putExtra(TunaNetraRecordActivity.EXTRA_REQUEST_DETAIL, requestItems.get(position));
                 startActivity(intent);
             }
         });
@@ -92,6 +94,13 @@ public class TunaNetraFragment extends Fragment implements TunaNetraView {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mediaPlayer) {
+                mAdapter.setmCurrentPlayingPosition(-1);
+                mAdapter.notifyItemChanged(currentAdapterPosition);
+            }
+        });
         mediaPlayer.start();
     }
 
@@ -112,6 +121,7 @@ public class TunaNetraFragment extends Fragment implements TunaNetraView {
         mAdapter = new TunaNetraAdapter(requestItems, getContext(), new TunaNetraAdapter.TunaNetraAdapterClickListener() {
             @Override
             public void onClickListener(String audioUrl, int adapterPosition, boolean isPlaying) {
+                currentAdapterPosition = adapterPosition;
                 Log.d("audioUrl", audioUrl);
                 if (isPlaying) {
                     mediaPlayer.pause();

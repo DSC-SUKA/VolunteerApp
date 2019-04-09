@@ -5,7 +5,7 @@
     android:background="@null">
 
     <RelativeLayout
-        android:id="@+id/dim_background_logout"
+        android:id="@+id/dim_background_discard_record"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/colorDim">
@@ -46,7 +46,7 @@
             android:layout_marginLeft="50dp"
             android:layout_marginTop="6dp"
             android:layout_marginRight="50dp"
-            android:text="Are you sure to logout from this app?"
+            android:text="Are you sure to discard and record again?"
             android:textAlignment="center"
             android:textColor="#888686"
             android:textSize="16sp" />
@@ -61,7 +61,7 @@
 
             <Button
                 android:textSize="16sp"
-                android:id="@+id/btn_logout_dialog_yes"
+                android:id="@+id/btn_discard_record_dialog_yes"
                 android:layout_width="0dp"
                 android:layout_height="40dp"
                 android:layout_marginLeft="40dp"
@@ -74,7 +74,7 @@
 
             <Button
                 android:textSize="16sp"
-                android:id="@+id/btn_logout_dialog_no"
+                android:id="@+id/btn_discard_dialog_dialog_no"
                 android:layout_width="0dp"
                 android:layout_height="40dp"
                 android:layout_marginLeft="10dp"
@@ -88,4 +88,5 @@
         </LinearLayout>
 
     </LinearLayout>
+
 </FrameLayout>
